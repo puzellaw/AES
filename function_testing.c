@@ -1,4 +1,4 @@
-/*C
+/*
 #include "unity.h"
 #include "file_to_test.h"
 
@@ -30,3 +30,90 @@ int main(void) {
 #include "Unity-master/src/unity.h"
 #include "AES_functions.h"
 
+void setUp(void) {
+    //set up any required variables
+}
+
+void tearDown(void) {
+
+}
+
+void test_AddRoundKey_correctOutput(void) {
+
+}
+
+void test_AES_128_correctOutput(void) {
+
+}
+
+void test_AES_192_correctOutput(void) {
+
+}
+
+void test_AES_256_correctOutput(void) {
+
+}
+
+void test_Cipher_correctOutput(void) {
+
+}
+
+void test_EqinvCipher_correctOutput(void) {
+
+} 
+
+void test_InvCipher_correctOutput(void) {
+
+}
+
+void test_InvMixColumns_correctOutput(void) {
+
+}
+
+void test_InvSBox_correctOutput(void) {
+
+}
+
+void test_InvShiftRows_correctOutput(void) {
+
+}
+
+void test_InvSubBytes_correctOutput(void) {
+
+}
+
+void test_KeyExpension_correctOutput(void) {
+    
+}
+
+void test_KeyExpansionEIC_correctOutput(void) {
+
+}
+
+void test_MixColumns_correctOutput(void) {
+
+}
+
+void test_RotWord_correctOutput(void) {
+
+}
+
+void test_SBox_correctOutput(void) {
+
+}
+
+void test_ShiftRows_correctOutput(void) {
+
+}
+
+void test_SubBytes_correctOutput(void) {
+
+}
+
+void test_SubWord_correctOutput(void) {
+
+}
+
+void test_XTimes_correctOutput(void) {
+    
+}
