@@ -27,8 +27,11 @@ int main(void) {
 }
 */ 
 
+// TO TEST: gcc function_testing.c  ./Unity-master/src/unity.c -o Testing
+
 #include "Unity-master/src/unity.h"
 #include "AES_functions.h"
+#include "sbox.c"
 
 void setUp(void) {
     //set up any required variables
@@ -95,11 +98,13 @@ void test_MixColumns_correctOutput(void) {
 }
 
 void test_RotWord_correctOutput(void) {
-
+    
 }
 
 void test_SBox_correctOutput(void) {
-
+    u_int8_t input = 0x78;
+    u_int8_t correctOut = 0xbc;
+    TEST_ASSERT_EQUAL_MESSAGE(correctOut, sbox(input), "Output should have been 0xBC");
 }
 
 void test_ShiftRows_correctOutput(void) {
@@ -116,4 +121,10 @@ void test_SubWord_correctOutput(void) {
 
 void test_XTimes_correctOutput(void) {
     
+}
+
+int main(void) {
+    UNITY_BEGIN();
+    RUN_TEST(test_SBox_correctOutput);
+    return UNITY_END();
 }
