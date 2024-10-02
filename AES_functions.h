@@ -6,6 +6,7 @@ Written by Will Puzella & Peter Kelly
 For Carleton College Computer Science Comps 2024
 */
 
+#include<stdio.h>
 
 
 /* The transformation of the state in which a round key is combined
@@ -56,9 +57,9 @@ new columns. */
 void MixColumns();
 /* The transformation of words in which the four bytes of the word
 are permuted cyclically. */
-void RotWord();
+void RotWord(u_int8_t vec[4]);
 /* The transformation of bytes defned by the S-box. */
-void SBox();
+u_int8_t SBox(u_int8_t a);
 /* The transformation of the state in which the last three rows are
 cyclically shifted by different offsets. */
 void ShiftRows();
@@ -67,8 +68,8 @@ to each byte of the state. */
 void SubBytes();
 /* The transformation of words in which the S-box is applied to each
 of the four bytes of the word. */
-void SubWord();
+void SubWord(u_int8_t vec[4]);
 /* The transformation of bytes in which the polynomial representation
 of the input byte is multiplied by x, modulo m(x), to produce the
 polynomial representation of the output byte. */
-void XTimes();
+u_int8_t XTimes(u_int8_t b);
