@@ -58,7 +58,7 @@ void MixColumns();
 are permuted cyclically. */
 void RotWord();
 /* The transformation of bytes defned by the S-box. */
-void SBox();
+u_int8_t SBox();
 /* The transformation of the state in which the last three rows are
 cyclically shifted by different offsets. */
 void ShiftRows();
@@ -71,4 +71,4 @@ void SubWord();
 /* The transformation of bytes in which the polynomial representation
 of the input byte is multiplied by x, modulo m(x), to produce the
 polynomial representation of the output byte. */
-void XTimes();
+u_int8_t XTimes();
