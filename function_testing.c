@@ -32,6 +32,9 @@ int main(void) {
 #include "Unity-master/src/unity.h"
 #include "AES_functions.h"
 #include "sbox.c"
+#include "sub_word.c"
+#include "rot_word.c"
+#include "x_times.c"
 
 void setUp(void) {
     //set up any required variables
@@ -97,34 +100,46 @@ void test_MixColumns_correctOutput(void) {
 
 }
 
-void test_RotWord_correctOutput(void) {
-    
+void test_RotWord_correctOutput(void) { //Done: Passing of 10/2/24
+    u_int8_t input[4] = {1,2,3,4};
+    u_int8_t expected[4] = {2,3,4,1};
+    RotWord(input);
+    TEST_ASSERT_EQUAL_UINT8_ARRAY_MESSAGE(expected, input, 4, "Output should have been [2,3,4,1]\n");
 }
 
-void test_SBox_correctOutput(void) {
+void test_SBox_correctOutput(void) { //Done: Passing as of 10/2/24
     u_int8_t input = 0x78;
     u_int8_t correctOut = 0xbc;
-    TEST_ASSERT_EQUAL_MESSAGE(correctOut, sbox(input), "Output should have been 0xBC");
+    TEST_ASSERT_EQUAL_MESSAGE(correctOut, SBox(input), "Output should have been 0xBC");
 }
 
 void test_ShiftRows_correctOutput(void) {
 
 }
 
-void test_SubBytes_correctOutput(void) {
-
-}
-
-void test_SubWord_correctOutput(void) {
-
-}
-
-void test_XTimes_correctOutput(void) {
+void test_SubBytes_correctOutput(void) { 
     
+}
+
+void test_SubWord_correctOutput(void) { //Done: Passing as of 10/2/24
+    u_int8_t input[4] = {0x8a, 0x5f , 0x27, 0xff};
+    u_int8_t expected[4] = {0x7e, 0xcf, 0xcc, 0x16};
+    SubWord(input);
+    TEST_ASSERT_EQUAL_UINT8_ARRAY_MESSAGE(expected, input, 4, "Output Should have been [0x7e, 0xcf,0x77, 0x16].\n");
+}
+
+void test_XTimes_correctOutput(void) { //Done: Passing as of 10/2/24
+    u_int8_t input= 0x57;
+    u_int8_t expected = 0xfe;
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(expected, XTimes(input), "Expected output as defined in manuel is 0xfe");
+
 }
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_SBox_correctOutput);
+    RUN_TEST(test_SubWord_correctOutput);
+    RUN_TEST(test_RotWord_correctOutput);
+    RUN_TEST(test_SubWord_correctOutput);
     return UNITY_END();
 }
