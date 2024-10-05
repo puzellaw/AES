@@ -46,7 +46,7 @@ void InvShiftRows();
 void InvSubBytes();
 
 /* The routine that generates the round keys from the key. */
-void KeyExpansion();
+void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[]);
 
 /* The routine that generates the modifed round keys for the equivalent
 inverse cipher. */
