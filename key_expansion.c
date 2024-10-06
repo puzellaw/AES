@@ -1,5 +1,6 @@
 #include"AES_functions.h"
 #include<stdio.h>
+#include<stdlib.h>
 
 void Rcon(u_int8_t buffer[4], int j) {
     u_int8_t roundConstants[][4] = {{0x01, 0x00, 0x00, 0x00},
@@ -20,12 +21,11 @@ void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[]) {
     // TODO add Nk to the args needed for the function probably
     int Nk = 4;
     int Nr = 10;
-    u_int8_t words[4*Nr+1][4];
     while (i <= Nk-1)
     {
         for (int iter = 0; iter < 4; iter++)
         {
-            words[i][iter] = key[4*i + iter];
+            buffer[i][iter] = key[4*i + iter];
         }
         i++;
     }
@@ -33,11 +33,11 @@ void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[]) {
         u_int8_t temp[4];
         for (int iter = 0; iter < 4; iter++)
         {
-            temp[iter] = words[i-1][iter];
+            temp[iter] = buffer[i-1][iter];
         }
         if(i % Nk == 0) {
             RotWord(temp);
-            SubWord(temp); //xor Rcon[i/Nk] but change def of SubWord and RotWord to return
+            SubWord(temp);
             u_int8_t rCon[4];
             Rcon(rCon, (i/Nk));
             for (int iter = 0; iter < 4; iter++)
@@ -50,15 +50,9 @@ void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[]) {
         }
         for (int iter = 0; iter < 4; iter++)
         {
-            words[i][iter] = words[i-Nk][iter]^temp[iter];
+            buffer[i][iter] = buffer[i-Nk][iter]^temp[iter];
+            
         }
         i++;
-    }
-    for (int iter = 0; iter < 4*Nr+1; iter++)
-    {
-        for (int iter2 = 0; iter2 < 4; iter2++)
-        {
-            buffer[iter][iter2] = words[iter][iter2];
-        } 
     }
 }

@@ -1,5 +1,7 @@
 #include"AES_functions.h"
 #include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
 
 
 /*
@@ -32,9 +34,10 @@ int main(void){
     // }
     
     u_int8_t key[16] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
-    u_int8_t buffer[41][4];
+    u_int8_t buffer[44][4];
+    
     KeyExpansion(buffer, key);
-    for (int i = 0; i < 41; i++)
+    for (int i = 0; i < 44; i++)
     {
         for (int i2 = 0; i2 < 4; i2++)
         {
@@ -42,7 +45,7 @@ int main(void){
         }
         printf("\n");
     }
-    
+
 
 
     return 0;
