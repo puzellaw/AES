@@ -54,7 +54,7 @@ void KeyExpansionEIC();
 /* The transformation of the state that takes all of the columns of the
 state and mixes their data (independently of one another) to produce
 new columns. */
-void MixColumns();
+void MixColumns(u_int8_t buffer[4][4]);
 /* The transformation of words in which the four bytes of the word
 are permuted cyclically. */
 void RotWord(u_int8_t vec[4]);
