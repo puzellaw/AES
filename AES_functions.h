@@ -11,7 +11,7 @@ For Carleton College Computer Science Comps 2024
 
 /* The transformation of the state in which a round key is combined
 with the state. */
-void AddRoundKey();
+void AddRoundKey(u_int8_t state[4][4], u_int32_t roundKey[4]);
 
 /* The block cipher specifed in this Standard with 128-bit keys. */
 void AES_128();
