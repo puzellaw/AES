@@ -35,6 +35,7 @@ int main(void) {
 #include "sub_word.c"
 #include "rot_word.c"
 #include "x_times.c"
+#include "add_round_key.c"
 
 void setUp(void) {
     //set up any required variables
@@ -44,8 +45,23 @@ void tearDown(void) {
 
 }
 
-void test_AddRoundKey_correctOutput(void) {
-
+void test_AddRoundKey_correctOutput(void) { //Done: Passing as of 10/6/24
+    u_int8_t input[4][4] = {{0x6a, 0xef, 0xff, 0x77}, 
+                            {0x88, 0x89, 0x77, 0x66},
+                            {0x66, 0x22, 0x84, 0x92},
+                            {0x85, 0x78, 0xbd, 0xe7}};
+    u_int32_t expandedKey[4] = {0x10141819,
+                                0xaabbccdd,
+                                0x2b7c8910,
+                                0x112c048f};
+    u_int8_t expectedOutput[4][4] = {{0x7a, 0xfb, 0xe7, 0x6e}, 
+                                     {0x22, 0x33, 0xbb, 0xbb},
+                                     {0x6d, 0x5e, 0x0d, 0x32},
+                                     {0x94, 0x54, 0xb9, 0x68}};
+    AddRoundKey(input, expandedKey);
+    for (int i; i < 4; i++) {
+        TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedOutput[i], input[i], 4);
+    }
 }
 
 void test_AES_128_correctOutput(void) {
@@ -100,7 +116,7 @@ void test_MixColumns_correctOutput(void) {
 
 }
 
-void test_RotWord_correctOutput(void) { //Done: Passing of 10/2/24
+void test_RotWord_correctOutput(void) { //Done: Passing as of 10/2/24
     u_int8_t input[4] = {1,2,3,4};
     u_int8_t expected[4] = {2,3,4,1};
     RotWord(input);
@@ -141,5 +157,6 @@ int main(void) {
     RUN_TEST(test_SubWord_correctOutput);
     RUN_TEST(test_RotWord_correctOutput);
     RUN_TEST(test_SubWord_correctOutput);
+    RUN_TEST(test_AddRoundKey_correctOutput);
     return UNITY_END();
 }
