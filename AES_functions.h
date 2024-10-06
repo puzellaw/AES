@@ -62,7 +62,7 @@ void RotWord(u_int8_t vec[4]);
 u_int8_t SBox(u_int8_t a);
 /* The transformation of the state in which the last three rows are
 cyclically shifted by different offsets. */
-void ShiftRows();
+void ShiftRows(u_int8_t buffer[][4]);
 /* The transformation of the state that applies the S-box independently
 to each byte of the state. */
 void SubBytes();
