@@ -33,19 +33,33 @@ int main(void){
     //     printf("%02x\n", vec[i]);
     // }
     
-    u_int8_t key[16] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
-    u_int8_t buffer[44][4];
+    // u_int8_t key[16] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
+    // u_int8_t buffer[44][4];
     
+    // KeyExpansion(buffer, key);
+    // for (int i = 0; i < 44; i++)
+    // {
+    //     for (int i2 = 0; i2 < 4; i2++)
+    //     {
+    //         printf("%02x ", buffer[i][i2]);
+    //     }
+    //     printf("\n");
+    // }
+
+    u_int8_t input[][4] = {{0x32, 0x43, 0xf6, 0xa8}, {0x88, 0x5a, 0x30, 0x8d}, {0x31, 0x31, 0x98, 0xa2}, {0xe0, 0x37, 0x07, 0x34}};
+    u_int8_t buffer[44][4];
+    u_int8_t key[] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
+
     KeyExpansion(buffer, key);
-    for (int i = 0; i < 44; i++)
+    for (int iter = 0; iter < 44; iter++)
     {
-        for (int i2 = 0; i2 < 4; i2++)
+        for (int iter2 = 0; iter2 < 4; iter2++)
         {
-            printf("%02x ", buffer[i][i2]);
+            printf("%02x ", buffer[iter][iter2]);
         }
         printf("\n");
     }
-
+    
 
 
     return 0;

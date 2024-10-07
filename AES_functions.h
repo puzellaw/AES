@@ -25,7 +25,7 @@ void AES_256();
 /* The transformation of blocks that underlies AES-128, AES-192,
 and AES-256; the key schedule and the number of rounds are
 parameters of the transformation. */
-void Cipher();
+void Cipher(u_int8_t buffer[][4], int Nr, u_int8_t words[][4]);
 
 /* The inverse of CIPHER() in which dw replaces w as the key schedule parameter. */
 void EqinvCipher();
