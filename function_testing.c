@@ -38,6 +38,8 @@ int main(void) {
 #include "add_round_key.c"
 #include "mix_columns.c"
 
+#define debugextra 0
+
 void setUp(void) {
     //set up any required variables
 }
@@ -113,7 +115,7 @@ void test_KeyExpansionEIC_correctOutput(void) {
 
 }
 
-void test_MixColumns_correctOutput(void) { // Not Passing
+void test_MixColumns_correctOutput(void) { // Done: Passing as of 10/7/24
     u_int8_t input[4][4] = {{0xd4,0xe0,0xb8,0x1e},
                             {0xbf,0xb4,0x41,0x27},
                             {0x5d,0x52,0x11,0x98},
@@ -124,7 +126,7 @@ void test_MixColumns_correctOutput(void) { // Not Passing
                                      {0xe5,0x9a,0x7a,0x4c}};
     MixColumns(input);
     for (int i = 0; i < 4; i++) {
-        TEST_MESSAGE("Checking Row");
+        if (debugextra) TEST_MESSAGE("Checking Row");
         TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedOutput[i], input[i], 4);
     }
 }
