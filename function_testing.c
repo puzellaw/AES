@@ -123,7 +123,7 @@ void test_MixColumns_correctOutput(void) { // Not Passing
                                      {0x81,0x19,0xd3,0x26},
                                      {0xe5,0x9a,0x7a,0x4c}};
     MixColumns(input);
-    for (int i; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         TEST_MESSAGE("Checking Row");
         TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedOutput[i], input[i], 4);
     }
