@@ -1,7 +1,7 @@
 #include"AES_functions.h"
 #include<stdio.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 void Cipher(u_int8_t buffer[][4], int Nr, u_int8_t words[][4]) {
     u_int8_t wordSlice[4][4];

@@ -14,13 +14,13 @@ with the state. */
 void AddRoundKey(u_int8_t state[4][4], u_int8_t roundKey[4][4]);
 
 /* The block cipher specifed in this Standard with 128-bit keys. */
-void AES_128();
+void AES_128(u_int8_t input[4][4],  u_int8_t key[]);
 
 /* The block cipher specifed in this Standard with 192-bit keys. */
-void AES_192();
+void AES_192(u_int8_t input[4][4],  u_int8_t key[]);
 
 /* The block cipher specifed in this Standard with 256-bit keys. */
-void AES_256();
+void AES_256(u_int8_t input[4][4],  u_int8_t key[]);
 
 /* The transformation of blocks that underlies AES-128, AES-192,
 and AES-256; the key schedule and the number of rounds are
@@ -46,7 +46,7 @@ void InvShiftRows();
 void InvSubBytes();
 
 /* The routine that generates the round keys from the key. */
-void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[]);
+void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr);
 
 /* The routine that generates the modifed round keys for the equivalent
 inverse cipher. */
