@@ -6,5 +6,4 @@ void SubWord(u_int8_t vec[4]) {
     {
         vec[i] = SBox(vec[i]);
     }
-    
 }

@@ -22,4 +22,3 @@ u_int8_t SBox(u_int8_t a) {
 
     return sbox[a/16][a%16];
 }
-
