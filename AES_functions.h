@@ -40,7 +40,7 @@ void InvMixColumns();
 void InvSBox();
 
 /* The inverse of SHIFTROWS(). */
-void InvShiftRows();
+void InvShiftRows(u_int8_t buffer[][4]);
 
 /* The inverse of SUBBYTES(). */
 void InvSubBytes();
