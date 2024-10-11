@@ -34,7 +34,7 @@ void EqinvCipher();
 void InvCipher();
 
 /* The inverse of MIXCOLUMNS().*/
-void InvMixColumns();
+void InvMixColumns(u_int8_t buffer[4][4]);
 
 /* The inverse of SBOX(). */
 void InvSBox();
@@ -50,7 +50,7 @@ void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr);
 
 /* The routine that generates the modifed round keys for the equivalent
 inverse cipher. */
-void KeyExpansionEIC();
+void KeyExpansionEIC(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr);
 /* The transformation of the state that takes all of the columns of the
 state and mixes their data (independently of one another) to produce
 new columns. */
