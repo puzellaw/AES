@@ -43,7 +43,7 @@ void InvSBox();
 void InvShiftRows(u_int8_t buffer[][4]);
 
 /* The inverse of SUBBYTES(). */
-void InvSubBytes();
+u_int8_t InvSubBytes(u_int8_t a);
 
 /* The routine that generates the round keys from the key. */
 void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr);
