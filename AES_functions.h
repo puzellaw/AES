@@ -31,7 +31,7 @@ void Cipher(u_int8_t buffer[][4], int Nr, u_int8_t words[][4]);
 void EqinvCipher();
 
 /* The inverse of CIPHER(). */
-void InvCipher();
+void InvCipher(u_int8_t buffer[][4], int Nr, u_int8_t words[][4]);
 
 /* The inverse of MIXCOLUMNS().*/
 void InvMixColumns(u_int8_t buffer[4][4]);

@@ -96,7 +96,6 @@ void Rcon(u_int8_t buffer[4], int j) {
 //Buffer in column major order
 void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr) {
     int i = 0;
-    // TODO add Nk to the args needed for the function probably
     while (i <= Nk-1)
     {
         for (int iter = 0; iter < 4; iter++)
