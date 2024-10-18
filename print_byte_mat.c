@@ -46,17 +46,17 @@ void string_to_mat(u_int8_t mat[4][4], char str[48]){
 
 
 
-int main(void) {
-    srand(time(NULL));   // Initialization, should only be called once.
-    u_int8_t mat[4][4];
-    char str[48] = "32 88 31 e0 43 5a 31 37 f6 30 98 07 a8 8d a2 34";
+// int main(void) {
+//     srand(time(NULL));   // Initialization, should only be called once.
+//     u_int8_t mat[4][4];
+//     char str[48] = "32 88 31 e0 43 5a 31 37 f6 30 98 07 a8 8d a2 34";
 
-    string_to_mat(mat, str);
-    // fill_mat(mat);
-    print_mat(mat);
+//     string_to_mat(mat, str);
+//     // fill_mat(mat);
+//     print_mat(mat);
 
-    return 0;
-}
+//     return 0;
+// }
 
 
 

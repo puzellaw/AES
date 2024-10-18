@@ -1,16 +1,17 @@
 #include "AES_functions.h"
+// #include"utilities.c"
 #include<assert.h>
 #include<stdio.h>
 #include<stdlib.h>
 
 
-void AddRoundKey(u_int8_t state[4][4], u_int8_t roundKey[4][4]) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            state[j][i] = state[j][i]^roundKey[i][j];
-        }
-    }
-}
+// void AddRoundKey(u_int8_t state[4][4], u_int8_t roundKey[4][4]) {
+//     for (int i = 0; i < 4; i++) {
+//         for (int j = 0; j < 4; j++) {
+//             state[j][i] = state[j][i]^roundKey[i][j];
+//         }
+//     }
+// }
 
 void AES_128(u_int8_t input[4][4],  u_int8_t key[]) {
     u_int8_t buffer[44][4];
@@ -80,17 +81,17 @@ void Cipher(u_int8_t buffer[][4], int Nr, u_int8_t words[][4]) {
     AddRoundKey(buffer, wordSlice);
 }
 
-void Rcon(u_int8_t buffer[4], int j) {
-    u_int8_t roundConstants[][4] = {{0x01, 0x00, 0x00, 0x00},
-    {0x02, 0x00, 0x00, 0x00},{0x04, 0x00, 0x00, 0x00},{0x08, 0x00, 0x00, 0x00},
-    {0x10, 0x00, 0x00, 0x00},{0x20, 0x00, 0x00, 0x00},{0x40, 0x00, 0x00, 0x00},
-    {0x80, 0x00, 0x00, 0x00},{0x1b, 0x00, 0x00, 0x00},{0x36, 0x00, 0x00, 0x00}};
+// void Rcon(u_int8_t buffer[4], int j) {
+//     u_int8_t roundConstants[][4] = {{0x01, 0x00, 0x00, 0x00},
+//     {0x02, 0x00, 0x00, 0x00},{0x04, 0x00, 0x00, 0x00},{0x08, 0x00, 0x00, 0x00},
+//     {0x10, 0x00, 0x00, 0x00},{0x20, 0x00, 0x00, 0x00},{0x40, 0x00, 0x00, 0x00},
+//     {0x80, 0x00, 0x00, 0x00},{0x1b, 0x00, 0x00, 0x00},{0x36, 0x00, 0x00, 0x00}};
 
-    for (int iter = 0; iter < 4; iter++)
-    {
-        buffer[iter] = roundConstants[j-1][iter];
-    }
-}
+//     for (int iter = 0; iter < 4; iter++)
+//     {
+//         buffer[iter] = roundConstants[j-1][iter];
+//     }
+// }
 
 
 //Buffer in column major order
@@ -132,22 +133,22 @@ void KeyExpansion(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr) {
     }
 }
 
-u_int8_t Multiply(u_int8_t a, u_int8_t b) {
-    u_int8_t result = 0;
-    u_int8_t carry = 0;
-    for (int i = 0; i < 8; i++) {
-        if (b & 1) {
-            result = result ^ a;
-        }
-        b = b >> 1;
-        carry = a & 0b10000000;
-        a = a << 1; 
-        if (carry) {
-            a = a ^ 0x1b;
-        }
-    }
-    return result;
-}
+// u_int8_t Multiply(u_int8_t a, u_int8_t b) {
+//     u_int8_t result = 0;
+//     u_int8_t carry = 0;
+//     for (int i = 0; i < 8; i++) {
+//         if (b & 1) {
+//             result = result ^ a;
+//         }
+//         b = b >> 1;
+//         carry = a & 0b10000000;
+//         a = a << 1; 
+//         if (carry) {
+//             a = a ^ 0x1b;
+//         }
+//     }
+//     return result;
+// }
 
 void MixColumns(u_int8_t buffer[4][4]) {
     u_int8_t tmp[4];
@@ -219,19 +220,19 @@ void ShiftRows(u_int8_t buffer[][4]) {
     buffer[3][3] = temp;
 }
 
-void SubWord(u_int8_t vec[4]) {
-    for (int i = 0; i < 4; i++)
-    {
-        vec[i] = SBox(vec[i]);
-    }
-}
+// void SubWord(u_int8_t vec[4]) {
+//     for (int i = 0; i < 4; i++)
+//     {
+//         vec[i] = SBox(vec[i]);
+//     }
+// }
 
-u_int8_t XTimes(u_int8_t b){
-    if ((int)(b & 0b10000000) == (int)(0b10000000)) {
-        b = (b<<1)^0b00011011;
-    }
-    else {
-        b = b<<1;
-    }
-    return b;
-}
+// u_int8_t XTimes(u_int8_t b){
+//     if ((int)(b & 0b10000000) == (int)(0b10000000)) {
+//         b = (b<<1)^0b00011011;
+//     }
+//     else {
+//         b = b<<1;
+//     }
+//     return b;
+// }

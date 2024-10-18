@@ -1,4 +1,5 @@
 /* 
+
 Header for Functions required to implement the AES cryptographic method.
 Adopted from NIST AES standard.
 
@@ -73,3 +74,8 @@ void SubWord(u_int8_t vec[4]);
 of the input byte is multiplied by x, modulo m(x), to produce the
 polynomial representation of the output byte. */
 u_int8_t XTimes(u_int8_t b);
+
+
+void Rcon(u_int8_t buffer[4], int j);
+
+u_int8_t Multiply(u_int8_t a, u_int8_t b);
