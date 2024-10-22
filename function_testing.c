@@ -32,10 +32,8 @@ int main(void) {
 #include "Unity-master/src/unity.h"
 #include "AES_functions.h"
 #include "encryption.c"
-#include "key_expansion_EIC.c"
-#include "inv_cipher.c"
-#include "inv_sub_bytes.c"
-#include "inv_shift_rows.c"
+#include "decryption.c"
+#include "utilities.c"
 
 #define debugextra 1
 
