@@ -14,7 +14,7 @@ u_int8_t XTimes(u_int8_t b){
 void AddRoundKey(u_int8_t state[4][4], u_int8_t roundKey[4][4]) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            printf("state %i,%i is %02x from %02x and %02x\n", i,j,state[i][j]^roundKey[j][i], state[i][j],roundKey[j][i]);
+            // printf("state %i,%i is %02x from %02x and %02x\n", i,j,state[i][j]^roundKey[j][i], state[i][j],roundKey[j][i]);
             state[i][j] = state[i][j]^roundKey[j][i];
         }
     }
