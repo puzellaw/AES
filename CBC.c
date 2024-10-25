@@ -99,14 +99,6 @@ u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
         block[i%4][i/4] = 0x00;
         i++;
     }
-    // for (int iter = 0; iter < 4; iter++)
-    // {
-    //     for (int iter2 = 0; iter2 < 4; iter2++)
-    //     {
-    //         printf("%02x ", block[iter][iter2]);
-    //     }
-    //     printf("\n");   
-    // }
     XOR(block, previousVector);
     AES_128(block, key);
     for (int j = 0; j < 16; j++) {
@@ -130,7 +122,6 @@ u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
         initialVector[q%4][q/4] = iv[q]; 
     }
     while (feof(inputFile) == 0) {
-        printf("ch is %02x\n", (u_int8_t)ch);
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
             for (int iter = 0; iter < 4; iter++)
@@ -141,13 +132,9 @@ u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
                     initialVector[iter][iter2] = block[iter][iter2];
                 }    
             }
-            
             InvCipher(block, 10, keyExp);
             XOR(block,previousVector);
-            
-         
             for (int j = 0; j < 16; j++) {
-                printf("%02x\n", block[j%4][j/4]);
                 fputc(block[j%4][j/4], outputFile);
             }
             i = 0; 
@@ -163,14 +150,11 @@ u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
         i++;
     }
     if (i == 16) {
-        printf("WHY ARE WE HERE!!!");
         InvCipher(block, 10, keyExp);
         XOR(block, previousVector);
         for (int j = 0; j < 16; j++) {
-            printf("seeing %02x\n", block[j%4][j/4]);
             fputc(block[j%4][j/4], outputFile);
         }
     }
-    
     return NULL;
 }
