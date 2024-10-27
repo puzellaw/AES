@@ -31,9 +31,10 @@ int main(void) {
 
 #include "Unity-master/src/unity.h"
 #include "AES_functions.h"
-#include "encryption.c"
-#include "decryption.c"
+//#include "encryption.c"
+//#include "decryption.c"
 #include "utilities.c"
+#include "GCM.c"
 
 #define debugextra 1
 
@@ -97,6 +98,23 @@ void test_AES_192_correctOutput(void) {
 
 void test_AES_256_correctOutput(void) {
 
+}
+
+void test_randomIntBlock_correctOutput(void) {
+    u_int8_t inputBlock[4][4] = {{0x34, 0x54, 0x45, 0xff},
+                                 {0x44, 0xaa, 0xaa, 0xff},
+                                 {0x11, 0x87, 0x56, 0xff},
+                                 {0xff, 0xff, 0xff, 0xff}};
+    u_int8_t expectedblock[4][4] = {{0x34, 0x54, 0x45, 0x00},
+                                    {0x44, 0xaa, 0xaa, 0x00},
+                                    {0x11, 0x87, 0x57, 0x00},
+                                    {0xff, 0xff, 0x00, 0x00}};
+    u_int8_t outputblock[4][4];
+    randomIntBlock(inputBlock, inputBlock);
+    for (int i=0; i < 4; i++) {
+        if (debugextra) TEST_MESSAGE("Checking Row");
+        TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedblock[i], inputBlock[i], 4);
+    }
 }
 
 void test_Cipher_correctOutput(void) {
@@ -245,5 +263,6 @@ int main(void) {
     RUN_TEST(test_AES_128_correctOutput);
     RUN_TEST(test_InvCipher_correctOutput);
     RUN_TEST(test_InvShiftRows_correctOutput);
+    RUN_TEST(test_randomIntBlock_correctOutput);
     return UNITY_END();
 }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 #include "encryption.c"
 #include "decryption.c"
 
@@ -11,7 +12,7 @@ u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
 u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
 FILE *openFileWrite(char *file_name);
 
-int main()
+/* int main()
 {
    char *input_file = "CBC_input.txt";
    char *output_file = "enc_output.txt";
@@ -33,23 +34,22 @@ int main()
    decryptFile(test_in, test_out, testkey, initializationVector);
 
    return 0;
-}
+} */
 
-u_int8_t *randomIntBlock(u_int8_t previousBlock[][4]) {
+void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
     /* srand(time(NULL));
     unsigned __int128 hi_num = 0xffffffffffffffffff;
     u_int16_t low_num = 0; 
     return (rand() % (hi_num - low_num)) + low_num;
     */
-    u_int8_t block[4][4];
     if (previousBlock == NULL) {
         for (int i=0; i < 4; i++) {
             for (int j=0; j < 4; j++) {
                 srand(time(NULL) + j + i);
-                block[j][i] = (u_int8_t) rand()%0xff;
+                dest[j][i] = (u_int8_t) rand()%0xff;
             }
         }
-        return block;
+        return;
     } else {
         bool changed = false;
         for (int i=3; i >= 0; i--) {
@@ -65,11 +65,11 @@ u_int8_t *randomIntBlock(u_int8_t previousBlock[][4]) {
                     changed = true;
                 }
                 if (previousBlock[j][i] == 0xff) {
-                    previousBlock[j][i] == 0; 
+                    previousBlock[j][i] = 0; 
                 }
             }
         }
-        return previousBlock; 
+        return; 
     }
 
     
@@ -110,11 +110,11 @@ FILE *openFileWrite(char *file_name) {
 }
 
 void blockMult(u_int8_t block1[16], u_int8_t block2[16]) {
-    unsigned __int128_t Z = 0x00000000000000000000000000000000;
+    /* unsigned __int128_t Z = 0x00000000000000000000000000000000;
     for (int i = 0; i < 127; i++)
     {
         Z[i] = 
-    }
+    } */
     
 }
 
