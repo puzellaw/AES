@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "encryption.c"
 #include "decryption.c"
 
@@ -34,12 +35,46 @@ int main()
    return 0;
 }
 
-u_int16_t randomInt() {
-    srand(time(NULL));
+u_int8_t *randomIntBlock(u_int8_t previousBlock[][4]) {
+    /* srand(time(NULL));
     unsigned __int128 hi_num = 0xffffffffffffffffff;
     u_int16_t low_num = 0; 
     return (rand() % (hi_num - low_num)) + low_num;
-}
+    */
+    u_int8_t block[4][4];
+    if (previousBlock == NULL) {
+        for (int i=0; i < 4; i++) {
+            for (int j=0; j < 4; j++) {
+                srand(time(NULL) + j + i);
+                block[j][i] = (u_int8_t) rand()%0xff;
+            }
+        }
+        return block;
+    } else {
+        bool changed = false;
+        for (int i=3; i >= 0; i--) {
+            if (changed) {
+                break;
+            }
+            for (int j=3; j >= 0; j--) {
+                if (changed) {
+                    break;
+                }
+                if (previousBlock[j][i] != 0xff) {
+                    previousBlock[j][i]++;
+                    changed = true;
+                }
+                if (previousBlock[j][i] == 0xff) {
+                    previousBlock[j][i] == 0; 
+                }
+            }
+        }
+        return previousBlock; 
+    }
+
+    
+    
+} 
 
 void XOR(u_int8_t a[][4], u_int8_t b[][4]) {
     for (int i = 0; i < 4; i++) {
