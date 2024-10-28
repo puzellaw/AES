@@ -11,30 +11,39 @@ FILE *openFile(char *file_name);
 u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
 u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
 FILE *openFileWrite(char *file_name);
+int getBit(u_int8_t ch, int index);
+void moveRight(u_int8_t blocks[16]);
 
-/* int main()
+int main()
 {
-   char *input_file = "CBC_input.txt";
-   char *output_file = "enc_output.txt";
-   u_int8_t buffer[4][4];
-   FILE *fp = openFile(input_file);
-   FILE *op = openFileWrite(output_file);
+//    char *input_file = "CBC_input.txt";v cwz
+//    char *output_file = "enc_output.txt";
+//    u_int8_t buffer[4][4];
+//    FILE *fp = openFile(input_file);
+//    FILE *op = openFileWrite(output_file);
 
    
-   u_int8_t key [] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-   u_int8_t testkey[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
-   u_int8_t initializationVector[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
-   encryptFile(fp, op, testkey, initializationVector);
-   fclose(fp);
-   fclose(op);
+//    u_int8_t key [] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+//    u_int8_t testkey[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
+//    u_int8_t initializationVector[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
+//    encryptFile(fp, op, testkey, initializationVector);
+//    fclose(fp);
+//    fclose(op);
 
-   FILE *test_in = fopen(output_file, "rb");
-   FILE *test_out = fopen("denc_output.txt", "wb");
+//    FILE *test_in = fopen(output_file, "rb");
+//    FILE *test_out = fopen("denc_output.txt", "wb");
 
-   decryptFile(test_in, test_out, testkey, initializationVector);
+//    decryptFile(test_in, test_out, testkey, initializationVector);
+    u_int8_t blocks[16] = {0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff};
+    moveRight(blocks);
+    for (int i = 0; i < 16; i++)
+    {
+        printf("%02x", blocks[i]);
+    }
+    
 
    return 0;
-} */
+} 
 
 void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
     /* srand(time(NULL));
@@ -109,14 +118,54 @@ FILE *openFileWrite(char *file_name) {
     return fp;
 }
 
-void blockMult(u_int8_t block1[16], u_int8_t block2[16]) {
-    /* unsigned __int128_t Z = 0x00000000000000000000000000000000;
-    for (int i = 0; i < 127; i++)
+void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
+    for (int i = 0; i < 16; i++)
     {
-        Z[i] = 
-    } */
-    
+        buffer[i] = 0x00;
+    }
+    u_int8_t R[16] = {0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    for (int iter = 0; iter < 128; iter++)
+    {
+        if(getBit(block1[iter/16], iter%16) != 0) {
+            for (int iter2 = 0; iter2 < 16; iter2++)
+            {
+                buffer[iter2] = buffer[iter2]^block2[iter2];
+            }
+        }
+        if(getBit(block2[15], 15) != 0) {
+            moveRight(block2);
+        } 
+        else {
+            moveRight(block2);
+            for (int i = 0; i < 16; i++)
+            {
+                block2[i] = block2[i]^R[i];
+            }
+        }
+
+    }
 }
+
+// Gets the bit specified by the index (starts from 0)
+int getBit(u_int8_t ch, int index) {
+    u_int8_t mask = ~(~0 << (1));
+    u_int8_t value = (ch >> index) & mask;
+    return (int)value;
+}
+
+void moveRight(u_int8_t blocks[16]) {
+    for (int i = 16; i > 0; i--)
+    {
+        if(getBit(blocks[i-1], 7) == 1) {
+            blocks[i] = (blocks[i] >> 1)|0x80;
+        }
+        else {
+            blocks[i] = (blocks[i] >> 1);
+        }
+    }
+    blocks[0] = blocks[0]>>1;
+}
+
 
 
 
