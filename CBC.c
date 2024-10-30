@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "CBM_functions.h"
 #include "encryption.c"
 #include "decryption.c"
+#include "CBM_functions.h"
 
 
-FILE *openFile(char *file_name);
-u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv);
-u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv);
-FILE *openFileWrite(char *file_name);
 
 int main()
 {
@@ -67,9 +65,22 @@ FILE *openFileWrite(char *file_name) {
     return fp;
 }
 
-u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
+u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
+    
     int nk;
     int nr;
+    int nk;
+    int nr;
+    if (encryptionScheme == 128) {
+        nk = 4;
+        nr = 10;
+    } else if (encryptionScheme == 192) {
+        nk = 6;
+        nr = 12;
+    } else if (encryptionScheme == 256) {
+        nk = 8;
+        nr = 14;
+    }
     u_int8_t block[4][4];
     u_int8_t previousVector[4][4];
     char ch;
@@ -84,6 +95,14 @@ u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
             XOR(block, previousVector);
+            if (encryptionScheme == 128) {
+                nk = 4;
+                nr = 10;
+            } else if (encryptionScheme == 192) {
+        
+            } else if (encryptionScheme == 256) {
+        
+            }
             AES_128(block, key);
             for (int j = 0; j < 16; j++) {
                 previousVector[j%4][j/4] = block[j%4][j/4];
@@ -107,12 +126,23 @@ u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
     return NULL;
 }
 
-u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
+u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
     int nr;
+    if (encryptionScheme == 128) {
+        nk = 4;
+        nr = 10;
+    } else if (encryptionScheme == 192) {
+        nk = 6;
+        nr = 12;
+    } else if (encryptionScheme == 256) {
+        nk = 8;
+        nr = 14;
+    }
+    
     u_int8_t block[4][4];
-    u_int8_t keyExp[44][4];
-    KeyExpansionEIC(keyExp, key, 4, 10);
+    u_int8_t keyExp[(nr + 1)*nk][4];
+    KeyExpansionEIC(keyExp, key, nk, nr);
     char ch;
     int i = 0;
     u_int8_t previousVector[4][4];

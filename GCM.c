@@ -5,14 +5,9 @@
 #include <time.h>
 #include "encryption.c"
 #include "decryption.c"
+#include "CBM_functions.h"
 
 
-FILE *openFile(char *file_name);
-u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
-u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
-FILE *openFileWrite(char *file_name);
-int getBit(u_int8_t ch, int index);
-void moveRight(u_int8_t blocks[16]);
 
 int main()
 {
@@ -34,13 +29,36 @@ int main()
 //    FILE *test_out = fopen("denc_output.txt", "wb");
 
 //    decryptFile(test_in, test_out, testkey, initializationVector);
-    u_int8_t blocks[16] = {0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff};
-    moveRight(blocks);
+
+
+
+    // u_int8_t num1[16] = {0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff};
+    // u_int8_t num2[16] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
+    u_int8_t num1[16] = {0xac, 0xbe, 0xf2, 0x05, 0x79, 0xb4, 0xb8, 0xeb, 0xce, 0x88, 0x9b, 0xac, 0x87, 0x32, 0xda, 0xd7};
+    u_int8_t num2[16] = {0xed, 0x95, 0xf8, 0xe1, 0x64, 0xbf, 0x32, 0x13, 0xfe, 0xbc, 0x74, 0x0f, 0x0b, 0xd9, 0xc4, 0xaf};
+    
+    u_int8_t buffer[16];
+    printf("NUM1\n");
     for (int i = 0; i < 16; i++)
     {
-        printf("%02x", blocks[i]);
+        printf("%02x", num1[i]);
     }
-    
+    printf("\n");
+    printf("NUM2\n");
+    for (int i = 0; i < 16; i++)
+    {
+        printf("%02x", num2[i]);
+    }
+    printf("\n");
+    blockMult(buffer, num1, num2);
+
+    printf("RESULT\n");
+    for (int i = 0; i < 16; i++)
+    {
+        printf("%02x", buffer[i]);
+    }
+
+ 
 
    return 0;
 } 
@@ -126,16 +144,39 @@ void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
     u_int8_t R[16] = {0xe1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     for (int iter = 0; iter < 128; iter++)
     {
-        if(getBit(block1[iter/16], iter%16) != 0) {
+        printf("X IS ");
+        for (int i = 0; i < 16; i++)
+        {
+            printf("%02x", block1[i]);
+        }
+        printf("\n");
+        printf("x%d is %02x from %02x using index %d,%d\n", iter, getBit(block1[15-iter/8], 7-(iter)%8), block1[15-iter/8], iter/8, iter%8);
+        if(getBit(block1[15-iter/8], 7 - iter%8) != 0) {
+            printf("xor with v\n");
             for (int iter2 = 0; iter2 < 16; iter2++)
             {
                 buffer[iter2] = buffer[iter2]^block2[iter2];
             }
         }
-        if(getBit(block2[15], 15) != 0) {
+        printf("Z is ");
+        for (int i = 0; i < 16; i++)
+        {
+            printf("%02x", buffer[i]);
+        }
+        printf("\n");
+        
+        printf("V is ");
+        for (int i = 0; i < 16; i++)
+        {
+            printf("%02x", block2[i]);
+        }
+        printf("\n");
+        
+        if(getBit(block2[15], 0) == 0) {
             moveRight(block2);
         } 
         else {
+            printf("ADD R\n");
             moveRight(block2);
             for (int i = 0; i < 16; i++)
             {
@@ -148,7 +189,7 @@ void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
 
 // Gets the bit specified by the index (starts from 0)
 int getBit(u_int8_t ch, int index) {
-    u_int8_t mask = ~(~0 << (1));
+    u_int8_t mask = ~((unsigned)~0 << (1));
     u_int8_t value = (ch >> index) & mask;
     return (int)value;
 }
@@ -169,7 +210,7 @@ void moveRight(u_int8_t blocks[16]) {
 
 
 
-u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
+u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
     int nk;
     int nr;
     u_int8_t block[4][4];
@@ -209,7 +250,7 @@ u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t
     return NULL;
 }
 
-u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
+u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
     int nk;
     int nr;
     u_int8_t block[4][4];

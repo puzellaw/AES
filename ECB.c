@@ -1,14 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "CBM_functions.h"
 #include "encryption.c"
 #include "decryption.c"
-
-
-FILE *openFile(char *file_name);
-u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key);
-u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key);
-FILE *openFileWrite(char *file_name);
 
 int main()
 {
@@ -58,7 +53,7 @@ FILE *openFileWrite(char *file_name) {
     return fp;
 }
 
-u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
+u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
     int nk;
     int nr;
     u_int8_t block[4][4];
@@ -98,7 +93,7 @@ u_int8_t *encryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
     return NULL;
 }
 
-u_int8_t *decryptFile(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
+u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
     int nk;
     int nr;
     u_int8_t block[4][4];
