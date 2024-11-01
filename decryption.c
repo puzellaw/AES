@@ -1,3 +1,5 @@
+#ifndef decyrption
+#define decyrption
 #include"AES_functions.h"
 #include<stdio.h>
 #include<stdlib.h>
@@ -207,3 +209,5 @@ void KeyExpansionEIC(u_int8_t buffer[][4], u_int8_t key[], int Nk, int Nr) {
         buffer[i][3] = wBuff[i][3];
     }
 }
+
+#endif

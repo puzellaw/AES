@@ -1,7 +1,12 @@
 #include"AES_functions.h"
+#include"CBM_functions.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>
+#include<stdbool.h>
+#include"GCM.c"
+#include"ECB.c"
+#include"ECB.c"
 
 
 /*
@@ -14,79 +19,74 @@ void test_decrypt();
 
 void test_encrypt();
 
-int main(void){
-
-    // u_int8_t input[][4] = {{0x32, 0x88, 0x31, 0xe0}, {0x43, 0x5a, 0x31, 0x37}, {0xf6, 0x30, 0x98, 0x07}, {0xa8, 0x8d, 0xa2, 0x34}};
-    // u_int8_t buffer[44][4];
-    // u_int8_t key[] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
-    // u_int8_t input[][4] = {{0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}};
-    // u_int8_t key[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,0xff};
-    // KeyExpansion(buffer, key, 4, 10);
-    // Cipher(input, 10, buffer);
-
-    // AES_128(input, key);
-    // AES_256(input, key);
-
-    // for (int iter = 0; iter < 4; iter++)
-    // {
-    //     for (int iter2 = 0; iter2 < 4; iter2++)
-    //     {
-    //         printf("%02x ", input[iter][iter2]);
-    //     }
-    //     printf("\n");
-    // }
-    
-    
-    
-    // u_int8_t buf[][4] = {{0x39,0x25,0x84,0x1d},{0x02,0xdc,0x09,0xfb},{0xdc,0x11,0x85,0x97},{0x19,0x6a,0x0b,0x32}};
-    u_int8_t buffer[44][4];
-    // u_int8_t buffer2[44][4];
-    u_int8_t key[] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
-    KeyExpansionEIC(buffer, key, 4, 10);
-    // KeyExpansion(buffer2, key, 4, 10);
-    printf("INV KEY EXPANSION\n");
-    for (int iter = 0; iter < 44; iter++)
-    {
-        for (int iter2 = 0; iter2 < 4; iter2++)
-        {
-            printf("%02x ", buffer[iter][iter2]);
+int main(int argc, char *argv[]){
+    bool optionTag = false; 
+    char blockCipherMode = 'E';
+    int encyptionMode = 128;
+    bool inputDirMode = false;
+    bool outputDirMode = false;
+    bool keyMode = false;
+    bool ivMode = false;
+    char *inputDir;
+    char *outputDir;
+    char *key;
+    char *iv;
+    for (int i = 1; i < argc; i++) {
+        if (outputDirMode) {
+            outputDir = argv[i];
+            outputDirMode = false;
+            continue;
         }
-        printf("\n");
+        if (inputDirMode) {
+            inputDir = argv[i];
+            inputDirMode = false;
+            continue;
+        }
+        if (keyMode) {
+            key = argv[i];
+            keyMode = false;
+            continue;
+        }
+        if (ivMode) {
+            iv = argv[i];
+            ivMode = false;
+            continue;
+        }
+        for (int j = 0; j < strlen(argv[argc]); j++) {
+            if (argv[i][j] == '-' && j == 0) {
+                optionTag = true; 
+            }
+            if (optionTag) {
+                switch(argv[i][j]) {
+                    case 'G':
+                        blockCipherMode = 'G';
+                        break;
+                    case 'E':
+                        blockCipherMode = 'E';
+                        break;
+                    case 'C':
+                        blockCipherMode = 'C';
+                        break;
+
+                    case 'I':
+                        inputDirMode = true;
+                        break;
+                    case 'O':
+                        outputDirMode = true; 
+                        break;
+                    case 'V':
+                        ivMode = true;
+                        break;
+                    case 'K':
+                        keyMode = true;
+                        break;
+                    default:
+                        break;
+                break; 
+                }
+            }
+        }
     }
-    // printf("\nPROPER KEY EXPANSION\n");
-
-    // for (int iter = 0; iter < 44; iter++)
-    // {
-    //     for (int iter2 = 0; iter2 < 4; iter2++)
-    //     {
-    //         printf("%02x ", buffer2[iter][iter2]);
-    //     }
-    //     printf("\n");
-    // }
-    
-    test_decrypt();
-
-    return 0;
-}
-
-void test_decrypt() {
-    // 3925841d02dc09fbdc118597196a0b32
-    u_int8_t buf[][4] = {{0x39,0x02,0xdc,0x19},{0x25,0xdc,0x11,0x6a},{0x84,0x09,0x85,0x0b},{0x1d,0xfb,0x97,0x32}};
-    print_matrix(buf);
-    u_int8_t buffer[44][4];
-    u_int8_t key[] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
-    KeyExpansionEIC(buffer,key,4,10);
-    InvCipher(buf, 10, buffer);
-    print_matrix(buf);
-}
-
-void test_encrypt() {
-    u_int8_t buf[][4] = {{0x32,0x88,0x31,0xe0},{0x43,0x5a,0x31,0x37},{0xf6,0x30,0x98,0x07},{0xa8,0x8d,0xa2,0x34}};
-    u_int8_t buffer[44][4];
-    u_int8_t key[] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
-    KeyExpansion(buffer,key,4,10);
-    Cipher(buf, 10, buffer);
-    print_matrix(buf);
 }
 
 void print_matrix(u_int8_t mat[4][4])  {

@@ -1,3 +1,5 @@
+#ifndef encryption
+#define encryption
 #include "AES_functions.h"
 // #include"utilities.c"
 #include<assert.h>
@@ -236,3 +238,5 @@ void ShiftRows(u_int8_t buffer[][4]) {
 //     }
 //     return b;
 // }
+
+#endif
