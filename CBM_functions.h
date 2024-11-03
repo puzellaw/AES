@@ -26,42 +26,42 @@ FILE *openFile(char *file_name);
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv
  * Return: u_int8_t *
  */
-u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv);
+u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme);
 
 /* 
  * Encrypts file using GCM block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n
  * Return: u_int8_t *
  */
-u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
+u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme);
 
 /* 
  * Encrypts file using ECM block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key
  * Return: u_int8_t *
  */
-u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key);
+u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme);
 
 /* 
  * Decrypts file using GCM block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n
  * Return: u_int8_t *
  */
-u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n);
+u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme);
 
 /* 
  * Decrypts file using CBC block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv
  * Return: u_int8_t *
  */
-u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv);
+u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme);
 
 /* 
  * Decrypts file using ECB block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key
  * Return: u_int8_t *
  */
-u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key);
+u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme);
 
 /* 
  * Utility function for blockMult() function, takes a byte and returns the bit at the given index. Zero Indexed. 

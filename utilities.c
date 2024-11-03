@@ -1,4 +1,5 @@
-#include"AES_functions.h"
+#include "AES_functions.h"
+#include "CBM_functions.h"
 #include<stdio.h>
 
 u_int8_t XTimes(u_int8_t b){
@@ -54,4 +55,29 @@ void SubWord(u_int8_t vec[4]) {
     {
         vec[i] = SBox(vec[i]);
     }
+}
+
+FILE *openFile(char *file_name) {
+    FILE *fp; 
+    fp = fopen(file_name, "rb");
+
+    if( fp == NULL ) //error checking
+   {
+      perror("Error while opening the file.\n");
+      exit(EXIT_FAILURE);
+   }
+    return fp;
+}
+
+FILE *openFileWrite(char *file_name) {
+    FILE *fp; 
+    char ch;
+    fp = fopen(file_name, "wb");
+
+    if( fp == NULL ) //error checking
+   {
+      perror("Error while opening the file.\n");
+      exit(EXIT_FAILURE);
+   }
+    return fp;
 }

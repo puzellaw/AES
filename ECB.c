@@ -28,34 +28,7 @@ int main()
    return 0;
 }
 
-FILE *openFile(char *file_name) {
-    FILE *fp; 
-    fp = fopen(file_name, "rb");
-
-    if( fp == NULL ) //error checking
-   {
-      perror("Error while opening the file.\n");
-      exit(EXIT_FAILURE);
-   }
-    return fp;
-}
-
-FILE *openFileWrite(char *file_name) {
-    FILE *fp; 
-    char ch;
-    fp = fopen(file_name, "wb");
-
-    if( fp == NULL ) //error checking
-   {
-      perror("Error while opening the file.\n");
-      exit(EXIT_FAILURE);
-   }
-    return fp;
-}
-
-u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
-    int nk;
-    int nr;
+u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
     u_int8_t block[4][4];
     char ch;
     int i = 0;
@@ -64,7 +37,20 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
 
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
-            AES_128(block, key);
+            switch (encryptionScheme) {
+                case 128:
+                    AES_128(block, key);
+                    break;
+                case 192:
+                    AES_192(block, key);
+                    break;
+                case 256:
+                    AES_256(block, key);
+                    break;
+                default:
+                    break;
+            }
+            
             for (int j = 0; j < 16; j++) {
                 fputc(block[j%4][j/4], outputFile);
             }
@@ -86,19 +72,42 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
     //     }
     //     printf("\n");   
     // }
-    AES_128(block, key);
+    switch (encryptionScheme) {
+        case 128:
+            AES_128(block, key);
+            break;
+        case 192:
+            AES_192(block, key);
+            break;
+        case 256:
+            AES_256(block, key);
+            break;
+        default:
+            break;
+    }
     for (int j = 0; j < 16; j++) {
         fputc(block[j%4][j/4], outputFile);
     }
     return NULL;
 }
 
-u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
+u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
     int nk;
     int nr;
+    if (encryptionScheme == 128) {
+        nk = 4;
+        nr = 10;
+    } else if (encryptionScheme == 192) {
+        nk = 6;
+        nr = 12;
+    } else if (encryptionScheme == 256) {
+        nk = 8;
+        nr = 14;
+    }
+    
     u_int8_t block[4][4];
-    u_int8_t keyExp[44][4];
-    KeyExpansionEIC(keyExp, key, 4, 10);
+    u_int8_t keyExp[(nr + 1)*nk][4];
+    KeyExpansionEIC(keyExp, key, nk, nr);
     char ch;
     int i = 0;
     ch = fgetc(inputFile);
@@ -106,7 +115,7 @@ u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
         printf("ch is %02x\n", (u_int8_t)ch);
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
-            InvCipher(block, 10, keyExp);
+            InvCipher(block, nr, keyExp);
             for (int j = 0; j < 16; j++) {
                 printf("%02x\n", block[j%4][j/4]);
                 fputc(block[j%4][j/4], outputFile);
@@ -124,7 +133,7 @@ u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key) {
     }
     if (i == 16) {
         printf("WHY ARE WE HERE!!!");
-        InvCipher(block, 10, keyExp);
+        InvCipher(block, nr, keyExp);
         for (int j = 0; j < 16; j++) {
             printf("seeing %02x\n", block[j%4][j/4]);
             fputc(block[j%4][j/4], outputFile);

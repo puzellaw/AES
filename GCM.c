@@ -111,31 +111,6 @@ void XOR(u_int8_t a[][4], u_int8_t b[][4]) {
     }
 }
 
-FILE *openFile(char *file_name) {
-    FILE *fp; 
-    fp = fopen(file_name, "rb");
-
-    if( fp == NULL ) //error checking
-   {
-      perror("Error while opening the file.\n");
-      exit(EXIT_FAILURE);
-   }
-    return fp;
-}
-
-FILE *openFileWrite(char *file_name) {
-    FILE *fp; 
-    char ch;
-    fp = fopen(file_name, "wb");
-
-    if( fp == NULL ) //error checking
-   {
-      perror("Error while opening the file.\n");
-      exit(EXIT_FAILURE);
-   }
-    return fp;
-}
-
 void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
     for (int i = 0; i < 16; i++)
     {
@@ -210,7 +185,7 @@ void moveRight(u_int8_t blocks[16]) {
 
 
 
-u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
+u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
     int nr;
     u_int8_t block[4][4];
@@ -250,7 +225,7 @@ u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
     return NULL;
 }
 
-u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv) {
+u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
     int nr;
     u_int8_t block[4][4];
