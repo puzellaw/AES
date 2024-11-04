@@ -1,3 +1,5 @@
+#ifndef GCM
+#define GCM
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,10 +8,11 @@
 #include "encryption.c"
 #include "decryption.c"
 #include "CBM_functions.h"
+#include "utilities.h"
 
 
 
-int main()
+/* int main()
 {
 //    char *input_file = "CBC_input.txt";v cwz
 //    char *output_file = "enc_output.txt";
@@ -61,7 +64,7 @@ int main()
  
 
    return 0;
-} 
+}  */
 
 void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
     /* srand(time(NULL));
@@ -103,13 +106,6 @@ void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
     
 } 
 
-void XOR(u_int8_t a[][4], u_int8_t b[][4]) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            a[i][j] = a[i][j] ^ b[i][j];
-        }
-    }
-}
 
 void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
     for (int i = 0; i < 16; i++)
@@ -276,3 +272,5 @@ u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
     }
     return NULL;
 }
+
+#endif

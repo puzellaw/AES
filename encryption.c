@@ -1,7 +1,7 @@
 #ifndef encryption
 #define encryption
 #include "AES_functions.h"
-// #include"utilities.c"
+#include"utilities.h"
 #include<assert.h>
 #include<stdio.h>
 #include<stdlib.h>

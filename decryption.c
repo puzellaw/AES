@@ -1,6 +1,7 @@
 #ifndef decyrption
 #define decyrption
 #include"AES_functions.h"
+#include"utilities.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>

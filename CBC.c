@@ -1,14 +1,18 @@
+#ifndef CBC
+#define CBC
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "CBM_functions.h"
+#include "AES_functions.h"
+#include "utilities.h"
 #include "encryption.c"
 #include "decryption.c"
-#include "CBM_functions.h"
 
 
 
-int main()
+
+/* int main()
 {
    char *input_file = "CBC_input.txt";
    char *output_file = "enc_output.txt";
@@ -31,14 +35,7 @@ int main()
 
    return 0;
 }
-
-void XOR(u_int8_t a[][4], u_int8_t b[][4]) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            a[i][j] = a[i][j] ^ b[i][j];
-        }
-    }
-}
+*/
 
 u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
@@ -101,7 +98,7 @@ u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
     }
     return NULL;
 }
-
+ 
 u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
     int nr;
@@ -164,3 +161,5 @@ u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
     }
     return NULL;
 }
+
+#endif

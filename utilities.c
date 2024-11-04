@@ -1,5 +1,9 @@
+#ifndef utilities
+#define utilities
+
 #include "AES_functions.h"
 #include "CBM_functions.h"
+#include "utilities.h"
 #include<stdio.h>
 
 u_int8_t XTimes(u_int8_t b){
@@ -81,3 +85,13 @@ FILE *openFileWrite(char *file_name) {
    }
     return fp;
 }
+
+void XOR(u_int8_t a[][4], u_int8_t b[][4]) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            a[i][j] = a[i][j] ^ b[i][j];
+        }
+    }
+}
+
+#endif
