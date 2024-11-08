@@ -39,7 +39,7 @@
     // u_int8_t num2[16] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
     u_int8_t num1[16] = {0xac, 0xbe, 0xf2, 0x05, 0x79, 0xb4, 0xb8, 0xeb, 0xce, 0x88, 0x9b, 0xac, 0x87, 0x32, 0xda, 0xd7};
     u_int8_t num2[16] = {0xed, 0x95, 0xf8, 0xe1, 0x64, 0xbf, 0x32, 0x13, 0xfe, 0xbc, 0x74, 0x0f, 0x0b, 0xd9, 0xc4, 0xaf};
-    
+    // expect 4DB870D37CB75FCB46097C36230D1612
     u_int8_t buffer[16];
     printf("NUM1\n");
     for (int i = 0; i < 16; i++)
@@ -61,10 +61,10 @@
         printf("%02x", buffer[i]);
     }
 
- 
 
    return 0;
-}  */
+}
+*/
 
 void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
     /* srand(time(NULL));
@@ -106,7 +106,9 @@ void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
     
 } 
 
-
+//  u_int8_t num1[16] = {0xac, 0xbe, 0xf2, 0x05, 0x79, 0xb4, 0xb8, 0xeb, 0xce, 0x88, 0x9b, 0xac, 0x87, 0x32, 0xda, 0xd7};
+// u_int8_t num2[16] = {0xed, 0x95, 0xf8, 0xe1, 0x64, 0xbf, 0x32, 0x13, 0xfe, 0xbc, 0x74, 0x0f, 0x0b, 0xd9, 0xc4, 0xaf};
+// expect 4DB870D37CB75FCB46097C36230D1612
 void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
     for (int i = 0; i < 16; i++)
     {
@@ -121,8 +123,8 @@ void blockMult(u_int8_t buffer[16], u_int8_t block1[16], u_int8_t block2[16]) {
             printf("%02x", block1[i]);
         }
         printf("\n");
-        printf("x%d is %02x from %02x using index %d,%d\n", iter, getBit(block1[15-iter/8], 7-(iter)%8), block1[15-iter/8], iter/8, iter%8);
-        if(getBit(block1[15-iter/8], 7 - iter%8) != 0) {
+        printf("x%d is %02x from %02x using index %d,%d\n", iter, getBit(block1[iter/8], 7-(iter)%8), block1[iter/8], iter/8, iter%8);
+        if(getBit(block1[iter/8], 7 - iter%8) != 0) {
             printf("xor with v\n");
             for (int iter2 = 0; iter2 < 16; iter2++)
             {
@@ -166,9 +168,9 @@ int getBit(u_int8_t ch, int index) {
 }
 
 void moveRight(u_int8_t blocks[16]) {
-    for (int i = 16; i > 0; i--)
+    for (int i = 15; i > 0; i--)
     {
-        if(getBit(blocks[i-1], 7) == 1) {
+        if(getBit(blocks[i-1], 0) == 1) {
             blocks[i] = (blocks[i] >> 1)|0x80;
         }
         else {
