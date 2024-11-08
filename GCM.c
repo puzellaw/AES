@@ -198,7 +198,19 @@ u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
             XOR(block, previousVector);
-            AES_128(block, key);
+            switch (encryptionScheme) {
+                case 128:
+                    AES_128(block, key);
+                    break;
+                case 192:
+                    AES_192(block, key);
+                    break;
+                case 256:
+                    AES_256(block, key);
+                    break;
+                default:
+                    break;
+            }
             for (int j = 0; j < 16; j++) {
                 previousVector[j%4][j/4] = block[j%4][j/4];
                 fputc(block[j%4][j/4], outputFile);
@@ -209,12 +221,24 @@ u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
             i++;
         }
     }
-    while (i < 16) {
+    while (i < 16 && (i != 0)) {
         block[i%4][i/4] = 0x00;
         i++;
     }
     XOR(block, previousVector);
-    AES_128(block, key);
+    switch (encryptionScheme) {
+        case 128:
+            AES_128(block, key);
+            break;
+        case 192:
+            AES_192(block, key);
+            break;
+        case 256:
+            AES_256(block, key);
+            break;
+        default:
+            break;
+            }
     for (int j = 0; j < 16; j++) {
         fputc(block[j%4][j/4], outputFile);
     }

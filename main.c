@@ -11,7 +11,7 @@
 
 
 /*
-    clang main.c encryption.c decryption.c utilites.c
+    clang main.c utilites.c
 */
 
 void print_matrix(u_int8_t mat[4][4]);

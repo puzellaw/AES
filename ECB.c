@@ -135,7 +135,9 @@ u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
     if (i == 16) {
         InvCipher(block, nr, keyExp);
         for (int j = 0; j < 16; j++) {
-            fputc(block[j%4][j/4], outputFile);
+            if (block[j%4][j/4] != 0) {
+                fputc(block[j%4][j/4], outputFile);
+            }
         }
     }
     
