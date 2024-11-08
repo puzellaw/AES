@@ -38,13 +38,10 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
     int i = 0;
     while (feof(inputFile) == 0) {
         ch = fgetc(inputFile);
-        printf("%c", ch);
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
-            printf("encryption scheme: %d", encryptionScheme);
             switch (encryptionScheme) {
                 case 128:
-                    printf("Encrypting BLock\n");
                     AES_128(block, key);
                     break;
                 case 192:
@@ -66,8 +63,7 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
             i++;
         }
     }
-    printf("Did I fail yet");
-    while (i < 16) {
+    while (i < 16 && (i != 0)) {
         block[i%4][i/4] = 0x00;
         i++;
     }
@@ -118,13 +114,11 @@ u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
     char ch;
     int i = 0;
     ch = fgetc(inputFile);
-    while (feof(inputFile) == 0) {
-        printf("ch is %02x\n", (u_int8_t)ch);
+    while (feof(inputFile) == 0) {  
         if (i == 15) {
             block[i%4][i/4] = (u_int8_t)ch;
             InvCipher(block, nr, keyExp);
             for (int j = 0; j < 16; j++) {
-                printf("%02x\n", block[j%4][j/4]);
                 fputc(block[j%4][j/4], outputFile);
             }
             i = 0; 
@@ -139,10 +133,8 @@ u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
         i++;
     }
     if (i == 16) {
-        printf("WHY ARE WE HERE!!!");
         InvCipher(block, nr, keyExp);
         for (int j = 0; j < 16; j++) {
-            printf("seeing %02x\n", block[j%4][j/4]);
             fputc(block[j%4][j/4], outputFile);
         }
     }

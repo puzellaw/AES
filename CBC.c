@@ -87,7 +87,7 @@ u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
             i++;
         }
     }
-    while (i < 16) {
+    while (i < 16 && (i != 0)) {
         block[i%4][i/4] = 0x00;
         i++;
     }
