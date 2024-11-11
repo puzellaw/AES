@@ -33,7 +33,7 @@ u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n
  * Return: u_int8_t *
  */
-u_int8_t *encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme);
+void encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme);
 
 /* 
  * Encrypts file using ECM block ciphering. 
@@ -47,8 +47,7 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n
  * Return: u_int8_t *
  */
-u_int8_t *decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme);
-
+void decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, u_int8_t* tag, int encryptionScheme);
 /* 
  * Decrypts file using CBC block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv

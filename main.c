@@ -30,12 +30,14 @@ int main(int argc, char *argv[]){
     bool keyMode = false;
     bool ivMode = false;
     bool decryptMode = false;
+    bool tagMode = false;
     int encyptionMode = 128;
     char blockCipherMode = 'E';
     char *inputDir;
     char *outputDir;
-    char *key;
-    char *iv;
+    char *key = NULL;
+    char *iv = NULL;
+    char *tag = NULL;
     for (int i = 1; i < argc; i++) {
         if (outputDirMode) {
             outputDir = argv[i];
@@ -57,7 +59,11 @@ int main(int argc, char *argv[]){
             ivMode = false;
             continue;
         }
-        
+        if (tagMode) {
+            tag = argv[i];
+            tagMode = false;
+            continue;
+        }
         for (int j = 0; j < strlen(argv[i]); j++) {
             
             if ((argv[i][j] == '-') && (j == 0)) {
@@ -75,7 +81,10 @@ int main(int argc, char *argv[]){
                     case 'C':
                         blockCipherMode = 'C';
                         break;
-
+                    case 'T':
+                        tagMode = true;
+                        optionTag = false;
+                        break;
                     case 'I':
                         inputDirMode = true;
                         optionTag = false;
@@ -104,12 +113,19 @@ int main(int argc, char *argv[]){
         }
     }
     printf("Input: %s\nOutput: %s\nKey: %s\nEncyption Mode: %c\n", inputDir, outputDir, key, blockCipherMode);
-    if ((blockCipherMode == 'C' || blockCipherMode == 'G') && iv == NULL) {
+    if (blockCipherMode == 'C' && iv == NULL) {
         printf("No Initialization vector found please include using the -V argument\n");
         exit(EXIT_FAILURE);
     }
-    if (blockCipherMode == 'C' || blockCipherMode == 'G') {
+    if (blockCipherMode == 'C' || (blockCipherMode == 'G' && iv != NULL)) {
         printf("Initialization Vector: %s\n", iv);
+    }
+    if (blockCipherMode == 'G' && decryptMode && tag == NULL) {
+        printf("No tag found please include using the -T argument\n");
+        exit(EXIT_FAILURE);
+    }
+    if (blockCipherMode == 'G' && decryptMode) {
+        printf("Tag: %s\n", tag);
     }
     if (key == NULL) {
         printf("Key must be provided using the -K argument\n");
@@ -124,7 +140,6 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
     int *bufferSize = (int *)malloc(sizeof(int));
-    printf("What is goin on?");
     u_int8_t *InterpretedKey = InterpretKey(key, bufferSize);
     FILE *inputFile = openFile(inputDir);
     FILE * outputFile = openFileWrite(outputDir);
@@ -135,8 +150,14 @@ int main(int argc, char *argv[]){
             if (*vectorSize != 128) {
                 printf("Initialization vector not 128bits. \n");
                 return -1;
+            }
+            int *vectorSize2 = (int *)malloc(4);
+            u_int8_t *interpretedTag = InterpretKey(tag,vectorSize2);
+            if (*vectorSize2 != 128) {
+                printf("Initialization vector not 128bits. \n");
+                return -1;
             } 
-            decryptFile_GCM(inputFile, outputFile, InterpretedKey, interpretedVector, *bufferSize);
+            decryptFile_GCM(inputFile, outputFile, InterpretedKey, interpretedVector, interpretedTag, *bufferSize);
             fclose(inputFile);
             fclose(outputFile);
             return 1;
@@ -160,7 +181,14 @@ int main(int argc, char *argv[]){
     } else {
         if (blockCipherMode == 'G') {
             int *vectorSize = (int *)malloc(4);
-            u_int8_t *interpretedVector = InterpretKey(iv,vectorSize);
+            u_int8_t *interpretedVector;
+            if (iv != NULL) {
+                interpretedVector = InterpretKey(iv,vectorSize);
+            } else {
+                interpretedVector = NULL;
+                *vectorSize = 128;
+            }
+            
             if (*vectorSize != 128) {
                 printf("Initialization vector not 128bits. \n");
                 return -1;
@@ -216,34 +244,34 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
     if (key[0] == '0' && (key[1] == 'x' || key[1] == 'X')) { // Hex Interpret mode
         printf("Hex buffer detected");
         int keyStringlength = strlen(key) - 2;
-        int i = 0;
+        int i = 2;
         printf("length: %d", keyStringlength);
         if (keyStringlength == 32) {
             u_int8_t *outputKey = (uint8_t *) malloc(16);
-            while (key[2*i] != '\0' && key[(2*i)+1] != '\0') {
-                outputKey[15-i] = identifyChar(key[2*i]);
-                outputKey[15-i] = outputKey[15-i] + (16*identifyChar(key[(2*i)+1]));
+            while (i != 17) {
+                outputKey[i-2] = 16 * identifyChar(key[2*i]);
+                outputKey[i-2] = outputKey[i-2] + identifyChar(key[(2*i)+1]);
                 i++;
             }
             printf("128\n\n");
             *bufferSize = 128;
             return outputKey;
 
-        } else if (keyStringlength == 48) {
+        } else if (keyStringlength == 49) {
             u_int8_t *outputKey = (uint8_t *) malloc(24);
-            while (key[2*i] != '\0' && key[(2*i)+1] != '\0') {
-                outputKey[23-i] = identifyChar(key[2*i]);
-                outputKey[23-i] = outputKey[23-i] + (16*identifyChar(key[(2*i)+1]));
+            while (i != 24) {
+                outputKey[24-i] = identifyChar(key[2*i]);
+                outputKey[24-i] = outputKey[24-i] + (16*identifyChar(key[(2*i)+1]));
                 i++;
             }
             printf("192\n\n");
             *bufferSize = 192;
             return outputKey;
-        } else if (keyStringlength == 64) {
+        } else if (keyStringlength == 65) {
             u_int8_t *outputKey = (uint8_t *) malloc(32);
-            while (key[2*i] != '\0' && key[(2*i)+1] != '\0') {
-                outputKey[31-i] = identifyChar(key[2*i]);
-                outputKey[31-i] = outputKey[31-i] + (16*identifyChar(key[(2*i)+1]));
+            while (i != 32) {
+                outputKey[32-i] = identifyChar(key[2*i]);
+                outputKey[32-i] = outputKey[32-i] + (16*identifyChar(key[(2*i)+1]));
                 i++;
             }
             printf("256\n\n");
@@ -254,7 +282,7 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
         // Decide if this will be needed
         return NULL;
     } else { // String Interpret Mode
-        printf("I am here\n");
+        // printf("I am here\n");
         int keyStringlenth = strlen(key);
         if (keyStringlenth >= 16) {
             u_int8_t *outputKey = malloc(16);

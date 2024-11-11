@@ -156,7 +156,9 @@ u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
         InvCipher(block, nr, keyExp);
         XOR(block, previousVector);
         for (int j = 0; j < 16; j++) {
-            fputc(block[j%4][j/4], outputFile);
+            if (block[j%4][j/4] != 0) {
+                fputc(block[j%4][j/4], outputFile);
+            }
         }
     }
     return NULL;
