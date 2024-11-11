@@ -227,33 +227,38 @@ int checkNumber(char *str) {
     }
     return isInt;
 }
-int identifyChar(char ch) {
+u_int8_t identifyChar(char ch) {
     if (ch >= '0' && ch <= '9') {
-        return ((int) ch) - 48;
+        return ((u_int8_t) ch) - 48;
     } else if (ch >= 'a' && ch <= 'f'){
-        return ((int) ch)- 82;
+        return ((u_int8_t) ch)- 87;
     } else if (ch >= 'A' && ch <= 'F') {
-        return ((int) ch) - 50;
+        return ((u_int8_t) ch) - 55;
     } else {
-        return -1;
+        return (u_int8_t) -1;
     }
 }
 
 u_int8_t *InterpretKey(char *key, int *bufferSize) {
-    printf("made it to key");
+    
     if (key[0] == '0' && (key[1] == 'x' || key[1] == 'X')) { // Hex Interpret mode
-        printf("Hex buffer detected");
+        
         int keyStringlength = strlen(key) - 2;
-        int i = 2;
-        printf("length: %d", keyStringlength);
+        int i = 1;
+        
         if (keyStringlength == 32) {
             u_int8_t *outputKey = (uint8_t *) malloc(16);
             while (i != 17) {
-                outputKey[i-2] = 16 * identifyChar(key[2*i]);
-                outputKey[i-2] = outputKey[i-2] + identifyChar(key[(2*i)+1]);
+                u_int8_t identifiedChar = identifyChar(key[2*i]);
+                printf("%x", identifiedChar);
+                outputKey[i-1] = identifyChar(key[2*i]);
+                outputKey[i-1] = outputKey[i-1] << 4;
+                identifiedChar = identifyChar(key[(2*i) + 1]);
+                printf("%x", identifiedChar);
+                outputKey[i-1] = outputKey[i-1] + identifyChar(key[(2*i)+1]);
                 i++;
             }
-            printf("128\n\n");
+            printf("\n");
             *bufferSize = 128;
             return outputKey;
 
