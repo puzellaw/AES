@@ -1,3 +1,10 @@
+/* 
+ * Implementation of AES-ECB Block Cipher Mode Functions. 
+ * Written by Will Puzella & Peter Kelly
+ * Carleton College; Computer Science Department; Comps 2024
+ */
+
+
 #ifndef ECB
 #define ECB
 #include <stdio.h>
@@ -10,7 +17,7 @@
 #include "decryption.c"
 
 
-u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
+int encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
     u_int8_t block[4][4];
     char ch;
     int i = 0;
@@ -31,7 +38,6 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
                 default:
                     break;
             }
-            
             for (int j = 0; j < 16; j++) {
                 fputc(block[j%4][j/4], outputFile);
             }
@@ -62,10 +68,10 @@ u_int8_t *encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
         for (int j = 0; j < 16; j++) {
             if (block[j%4][j/4] != 0 || block[j%4][j/4] != 0xff) {
                     fputc(block[j%4][j/4], outputFile);
-                }
+            }
         }
     }
-    return NULL;
+    return 1;
 }
 
 u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
@@ -123,8 +129,7 @@ u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int 
             }
         }
     }
-    
-    return NULL;
+    return 1;
 }
 
 #endif

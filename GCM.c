@@ -1,3 +1,9 @@
+/* 
+ * Implementation of AES-GCM Block Cipher Mode Functions. 
+ * Written by Will Puzella & Peter Kelly
+ * Carleton College; Computer Science Department; Comps 2024
+ */
+
 #ifndef GCM
 #define GCM
 #include <stdio.h>
@@ -115,7 +121,7 @@ void flatten(u_int8_t buffer[16], u_int8_t state[4][4]) {
 }
 
 
-void encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme) {
+int encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme) {
     u_int8_t block[4][4];
     u_int8_t counter[4][4];
     u_int8_t counterCopy[4][4];
@@ -238,9 +244,10 @@ void encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t 
         printf("%02x", hash[i]);
     }
     printf("\n");
+    return 1;
 }
 
-void decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, u_int8_t* tag, int encryptionScheme) {
+int decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, u_int8_t* tag, int encryptionScheme) {
     u_int8_t block[4][4];
     u_int8_t counter[4][4];
     u_int8_t counterCopy[4][4];
@@ -377,6 +384,7 @@ void decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t 
         }
     }
     printf("TAG AUTHENTICATED\n");
+    return 1;
 }
 
 #endif

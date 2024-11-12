@@ -1,10 +1,18 @@
+/* 
+ * Implementation of AES Block Cipher Encryption Functions. 
+ * Written by Will Puzella & Peter Kelly
+ * Carleton College; Computer Science Department; Comps 2024
+ */
+
 #ifndef encryption
 #define encryption
+
 #include "AES_functions.h"
-#include"utilities.h"
-#include<assert.h>
-#include<stdio.h>
-#include<stdlib.h>
+#include "utilities.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
 
 void AES_128(u_int8_t input[4][4],  u_int8_t key[]) {
     u_int8_t buffer[44][4];

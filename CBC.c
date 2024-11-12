@@ -1,3 +1,9 @@
+/* 
+ * Implementation of AES-CBC Block Cipher Mode Functions. 
+ * Written by Will Puzella & Peter Kelly
+ * Carleton College; Computer Science Department; Comps 2024
+ */
+
 #ifndef CBC
 #define CBC
 #include <stdio.h>
@@ -11,10 +17,7 @@
 
 
 
-
-
-
-u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
+int encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
     int nr;
     if (encryptionScheme == 128) {
@@ -77,10 +80,10 @@ u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
                 }
         }
     }
-    return NULL;
+    return 1;
 }
  
-u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
+int decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
     int nr;
     if (encryptionScheme == 128) {
@@ -148,7 +151,7 @@ u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
             }
         }
     }
-    return NULL;
+    return 1;
 }
 
 #endif

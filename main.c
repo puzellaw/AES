@@ -1,10 +1,18 @@
+/* 
+ * Implementation of AES Encryption Tool. See README for running details.  
+ * Written by Will Puzella & Peter Kelly
+ * Carleton College; Computer Science Department; Comps 2024
+ */
+
 #include"AES_functions.h"
 #include"CBM_functions.h"
 #include"utilities.h"
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<assert.h>
 #include<stdbool.h>
+
 #include"GCM.c"
 #include"ECB.c"
 #include"CBC.c"
@@ -14,13 +22,15 @@
     clang main.c utilites.c
 */
 
+/* 
+ * Helper function for printing matrices. 
+ */
 void print_matrix(u_int8_t mat[4][4]);
 
+/* 
+ * Function that takes in a string and converts it to its proper integer form. 
+ */
 u_int8_t *InterpretKey(char *key, int *bufferSize);
-
-void test_decrypt();
-
-void test_encrypt();
 
 
 int main(int argc, char *argv[]){
@@ -217,7 +227,9 @@ int main(int argc, char *argv[]){
     }
 }
 
-
+/* 
+ * Helper Function that checks if a string only contains ints
+ */
 int checkNumber(char *str) {
     int isInt = 1;
     for (int i = 0; i > strlen(str); i++) {
@@ -227,6 +239,10 @@ int checkNumber(char *str) {
     }
     return isInt;
 }
+
+/* 
+ * Helper function for interpret key that given a char value interprets it as its numerical value in hex. 
+ */
 u_int8_t identifyChar(char ch) {
     if (ch >= '0' && ch <= '9') {
         return ((u_int8_t) ch) - 48;
@@ -249,37 +265,35 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
         if (keyStringlength == 32) {
             u_int8_t *outputKey = (uint8_t *) malloc(16);
             while (i != 17) {
-                u_int8_t identifiedChar = identifyChar(key[2*i]);
-                printf("%x", identifiedChar);
+                
                 outputKey[i-1] = identifyChar(key[2*i]);
                 outputKey[i-1] = outputKey[i-1] << 4;
-                identifiedChar = identifyChar(key[(2*i) + 1]);
-                printf("%x", identifiedChar);
                 outputKey[i-1] = outputKey[i-1] + identifyChar(key[(2*i)+1]);
                 i++;
             }
-            printf("\n");
             *bufferSize = 128;
             return outputKey;
 
         } else if (keyStringlength == 49) {
             u_int8_t *outputKey = (uint8_t *) malloc(24);
             while (i != 24) {
-                outputKey[24-i] = identifyChar(key[2*i]);
-                outputKey[24-i] = outputKey[24-i] + (16*identifyChar(key[(2*i)+1]));
+                outputKey[i-1] = identifyChar(key[2*i]);
+                outputKey[i-1] = outputKey[i-1] << 4;
+                outputKey[i-1] = outputKey[i-1] + identifyChar(key[(2*i)+1]);
                 i++;
             }
-            printf("192\n\n");
             *bufferSize = 192;
             return outputKey;
+
         } else if (keyStringlength == 65) {
             u_int8_t *outputKey = (uint8_t *) malloc(32);
             while (i != 32) {
-                outputKey[32-i] = identifyChar(key[2*i]);
-                outputKey[32-i] = outputKey[32-i] + (16*identifyChar(key[(2*i)+1]));
+
+                outputKey[i-1] = identifyChar(key[2*i]);
+                outputKey[i-1] = outputKey[i-1] << 4;
+                outputKey[i-1] = outputKey[i-1] + identifyChar(key[(2*i)+1]);
                 i++;
             }
-            printf("256\n\n");
             *bufferSize = 256;
             return outputKey;
         }
@@ -287,7 +301,6 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
         // Decide if this will be needed
         return NULL;
     } else { // String Interpret Mode
-        // printf("I am here\n");
         int keyStringlenth = strlen(key);
         if (keyStringlenth >= 16) {
             u_int8_t *outputKey = malloc(16);
@@ -333,7 +346,6 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
     }
     return NULL;
 }
-
 
 void print_matrix(u_int8_t mat[4][4])  {
     for (int i = 0; i < 4; i++) {
