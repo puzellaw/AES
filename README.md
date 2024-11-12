@@ -52,5 +52,5 @@ A tag of `-I` and `-O` is required for all running of `PK_AES`. Additionally `-E
 
 **`-B` Arguments**
 - `-K [Key String]` Input string can either be in hex 0xXXXXX format or a regular string. Key needs to be 128, 192, or 256 bits long. 
-- '-v [seed for n]` (Optional) Input string can either be in hex 0xXXXXX... format or a regular string. n seed needs to be 128 bits long.  
+- `-v [seed for n]` (Optional) Input string can either be in hex 0xXXXXX... format or a regular string. n seed needs to be 128 bits long.  
 
