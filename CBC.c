@@ -12,30 +12,7 @@
 
 
 
-/* int main()
-{
-   char *input_file = "CBC_input.txt";
-   char *output_file = "enc_output.txt";
-   u_int8_t buffer[4][4];
-   FILE *fp = openFile(input_file);
-   FILE *op = openFileWrite(output_file);
 
-   
-   u_int8_t key [] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-   u_int8_t testkey[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
-   u_int8_t initializationVector[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
-   encryptFile(fp, op, testkey, initializationVector);
-   fclose(fp);
-   fclose(op);
-
-   FILE *test_in = fopen(output_file, "rb");
-   FILE *test_out = fopen("denc_output.txt", "wb");
-
-   decryptFile(test_in, test_out, testkey, initializationVector);
-
-   return 0;
-}
-*/
 
 u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
     int nk;
@@ -87,14 +64,18 @@ u_int8_t *encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
             i++;
         }
     }
-    while (i < 16 && (i != 0)) {
-        block[i%4][i/4] = 0x00;
-        i++;
-    }
-    XOR(block, previousVector);
-    AES_128(block, key);
-    for (int j = 0; j < 16; j++) {
-        fputc(block[j%4][j/4], outputFile);
+    if (i !=0) {
+        while (i < 16) {
+            block[i%4][i/4] = 0x00;
+            i++;
+        }
+        XOR(block, previousVector);
+        AES_128(block, key);
+        for (int j = 0; j < 16; j++) {
+            if (block[j%4][j/4] != 0 || block[j%4][j/4] != 0xff) {
+                    fputc(block[j%4][j/4], outputFile);
+                }
+        }
     }
     return NULL;
 }
@@ -137,16 +118,22 @@ u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
             }
             InvCipher(block, nr, keyExp);
             XOR(block,previousVector);
+            ch = fgetc(inputFile);
             for (int j = 0; j < 16; j++) {
-                fputc(block[j%4][j/4], outputFile);
+                if (feof(inputFile) != 0 && block[j%4][j/4] != 0 && block[j%4][j/4] != 0xff) {
+                    fputc(block[j%4][j/4], outputFile);
+                } else if (feof(inputFile) == 0) {
+                    fputc(block[j%4][j/4], outputFile);
+                }
             }
             i = 0; 
         }
         else {
             block[i%4][i/4] = (u_int8_t)ch;
             i++;
+            ch = fgetc(inputFile);
         }
-        ch = fgetc(inputFile);
+       
     }
     while (i < 16 && (i != 0)) {
         block[i%4][i/4] = 0x00;
@@ -156,7 +143,7 @@ u_int8_t *decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_in
         InvCipher(block, nr, keyExp);
         XOR(block, previousVector);
         for (int j = 0; j < 16; j++) {
-            if (block[j%4][j/4] != 0) {
+            if (block[j%4][j/4] != 0 || block[j%4][j/4] != 0xff) {
                 fputc(block[j%4][j/4], outputFile);
             }
         }

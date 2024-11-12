@@ -10,62 +10,6 @@
 #include "CBM_functions.h"
 #include "utilities.h"
 
-
-
-/* int main()
-{
-//    char *input_file = "CBC_input.txt";v cwz
-//    char *output_file = "enc_output.txt";
-//    u_int8_t buffer[4][4];
-//    FILE *fp = openFile(input_file);
-//    FILE *op = openFileWrite(output_file);
-
-   
-//    u_int8_t key [] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-//    u_int8_t testkey[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
-//    u_int8_t initializationVector[] = {0x68, 0x6f, 0x77, 0x20, 0x6c, 0x6f, 0x6e, 0x67, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x69, 0x73};
-//    encryptFile(fp, op, testkey, initializationVector);
-//    fclose(fp);
-//    fclose(op);
-
-//    FILE *test_in = fopen(output_file, "rb");
-//    FILE *test_out = fopen("denc_output.txt", "wb");
-
-//    decryptFile(test_in, test_out, testkey, initializationVector);
-
-
-
-    // u_int8_t num1[16] = {0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff};
-    // u_int8_t num2[16] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
-    u_int8_t num1[16] = {0xac, 0xbe, 0xf2, 0x05, 0x79, 0xb4, 0xb8, 0xeb, 0xce, 0x88, 0x9b, 0xac, 0x87, 0x32, 0xda, 0xd7};
-    u_int8_t num2[16] = {0xed, 0x95, 0xf8, 0xe1, 0x64, 0xbf, 0x32, 0x13, 0xfe, 0xbc, 0x74, 0x0f, 0x0b, 0xd9, 0xc4, 0xaf};
-    // expect 4DB870D37CB75FCB46097C36230D1612
-    u_int8_t buffer[16];
-    printf("NUM1\n");
-    for (int i = 0; i < 16; i++)
-    {
-        printf("%02x", num1[i]);
-    }
-    printf("\n");
-    printf("NUM2\n");
-    for (int i = 0; i < 16; i++)
-    {
-        printf("%02x", num2[i]);
-    }
-    printf("\n");
-    blockMult(buffer, num1, num2);
-
-    printf("RESULT\n");
-    for (int i = 0; i < 16; i++)
-    {
-        printf("%02x", buffer[i]);
-    }
-
-
-   return 0;
-}
-*/
-
 // Computes y+1 step of GHASH function, returns result in A
 void GHASH(u_int8_t A[16], u_int8_t B[16], u_int8_t H[16]) {
     
@@ -78,11 +22,6 @@ void GHASH(u_int8_t A[16], u_int8_t B[16], u_int8_t H[16]) {
 }
 
 void randomIntBlock(u_int8_t dest[4][4], u_int8_t previousBlock[4][4]) {
-    /* srand(time(NULL));
-    unsigned __int128 hi_num = 0xffffffffffffffffff;
-    u_int16_t low_num = 0; 
-    return (rand() % (hi_num - low_num)) + low_num;
-    */
     if (previousBlock == NULL) {
         for (int i=0; i < 4; i++) {
             for (int j=0; j < 4; j++) {
@@ -278,7 +217,9 @@ void encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t 
         flatten(flatblock, block);
         GHASH(hash, flatblock, h);
         for (int j = 0; j < 16; j++) {
-            fputc(block[j%4][j/4], outputFile);
+            if (block[j%4][j/4] != 0 && block[j%4][j/4] != 0xff) {
+                fputc(block[j%4][j/4], outputFile);
+            }
         }
         printf("\n");
     }
@@ -356,12 +297,17 @@ void decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t 
             XOR(block, counter);
             randomIntBlock(counterCopy,counterCopy);
             length = length + 8;
+            ch = fgetc(inputFile);
             for (int j = 0; j < 16; j++) {
                 counter[j%4][j/4] = counterCopy[j%4][j/4];
-                fputc(block[j%4][j/4], outputFile);
+                if (feof(inputFile) != 0 && block[j%4][j/4] != 0 && block[j%4][j/4] != 0xff) {
+                    fputc(block[j%4][j/4], outputFile);
+                } else if (feof(inputFile) == 0) {
+                    fputc(block[j%4][j/4], outputFile);
+                }
             }
             i = 0;
-            ch = fgetc(inputFile);
+            
         } 
         else {
             block[i%4][i/4] = (u_int8_t)ch;
@@ -396,7 +342,9 @@ void decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t 
         XOR(block, counter);
         
         for (int j = 0; j < 16; j++) {
-            fputc(block[j%4][j/4], outputFile);
+            if (block[j%4][j/4] != 0 && block[j%4][j/4] != 0xff) {
+                fputc(block[j%4][j/4], outputFile);
+            }
         }
     }
     
