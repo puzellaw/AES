@@ -18,18 +18,6 @@
 
 
 int encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
-    int nk;
-    int nr;
-    if (encryptionScheme == 128) {
-        nk = 4;
-        nr = 10;
-    } else if (encryptionScheme == 192) {
-        nk = 6;
-        nr = 12;
-    } else if (encryptionScheme == 256) {
-        nk = 8;
-        nr = 14;
-    }
     u_int8_t block[4][4];
     u_int8_t previousVector[4][4];
     char ch;
@@ -84,8 +72,8 @@ int encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *
 }
  
 int decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme) {
-    int nk;
-    int nr;
+    int nk = 0;
+    int nr = 0;
     if (encryptionScheme == 128) {
         nk = 4;
         nr = 10;

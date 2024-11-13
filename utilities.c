@@ -75,7 +75,6 @@ FILE *openFile(char *file_name) {
 
 FILE *openFileWrite(char *file_name) {
     FILE *fp; 
-    char ch;
     fp = fopen(file_name, "wb");
 
     if( fp == NULL ) //error checking

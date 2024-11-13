@@ -74,9 +74,9 @@ int encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryp
     return 1;
 }
 
-u_int8_t *decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
-    int nk;
-    int nr;
+int decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme) {
+    int nk = 0;
+    int nr = 0;
     if (encryptionScheme == 128) {
         nk = 4;
         nr = 10;

@@ -41,7 +41,6 @@ int main(int argc, char *argv[]){
     bool ivMode = false;
     bool decryptMode = false;
     bool tagMode = false;
-    int encyptionMode = 128;
     char blockCipherMode = 'E';
     char *inputDir;
     char *outputDir;
