@@ -2,7 +2,7 @@
  ***Written by Peter Kelly & Will Puzella***  
 Carleton College, Computer Science, Fall Comps 2024
 
-This project was the culminating senior thesis for Will Puzella and Peter Kelly. Where they implemented the advanced encryption standard with three different block cipher modes (ECB, CBC, & GCM). A further description of the project can be found at the link below. 
+This project was the culminating senior thesis for Will Puzella and Peter Kelly, where they implemented the Advanced Encryption Standard with three different block cipher modes (ECB, CBC, & GCM). A further description of the project can be found at the link below. 
 
 [Full Project Write-up](putlinkhere) 
 
@@ -20,12 +20,12 @@ All Code required to run the files is located within the git repository. All lib
 ### Compilation
 To compile the source code go to directory that code was dowloaded to and type `make`. This will execute the make file which should compile the code for you. 
 
-If you instead would liek to compile the testing suite type `make test`. This will compile a testing executable. 
+If you instead would like to compile the testing suite type `make test`. This will compile a testing executable. 
 
 ## Running our encryption software. 
 To run the encryption/decryption software run:
 
-`./PK_AES -E -I [input file directory] -O [Output File directory] [additional arguments]`
+`./PK_AES -E/-D -I [input file directory] -O [Output File directory] [additional arguments]`
 
 The style of the arguments is such that they can be put in any order as long as the format is: 
 

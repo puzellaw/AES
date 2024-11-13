@@ -24,41 +24,41 @@ FILE *openFile(char *file_name);
 /* 
  * Encrypts file using CBC block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv
- * Return: u_int8_t *
+ * Return: int
  */
 int encryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme);
 
 /* 
  * Encrypts file using GCM block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n
- * Return: u_int8_t *
+ * Return: int
  */
 int encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, int encryptionScheme);
 
 /* 
  * Encrypts file using ECM block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key
- * Return: u_int8_t *
+ * Return: int
  */
 int encryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme);
 
 /* 
  * Decrypts file using GCM block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n
- * Return: u_int8_t *
+ * Return: int
  */
 int decryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *n, u_int8_t* tag, int encryptionScheme);
 /* 
  * Decrypts file using CBC block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv
- * Return: u_int8_t *
+ * Return: int
  */
 int decryptFile_CBC(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *iv, int encryptionScheme);
 
 /* 
  * Decrypts file using ECB block ciphering. 
  * Args: FILE *inputFile, FILE *outputFile, u_int8_t *key
- * Return: u_int8_t *
+ * Return: int
  */
 int decryptFile_ECB(FILE *inputFile, FILE *outputFile, u_int8_t *key, int encryptionScheme);
 
