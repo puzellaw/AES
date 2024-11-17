@@ -163,6 +163,7 @@ int main(int argc, char *argv[]){
                 free(bufferSize);
                 free(vectorSize);
                 free(InterpretedKey);
+                free(interpretedVector);
                 return -1;
             }
             int *vectorSize2 = (int *)malloc(4);
@@ -175,6 +176,7 @@ int main(int argc, char *argv[]){
                 free(vectorSize2);
                 free(InterpretedKey);
                 free(interpretedTag);
+                free(interpretedVector);
                 return -1;
             } 
             decryptFile_GCM(inputFile, outputFile, InterpretedKey, interpretedVector, interpretedTag, *bufferSize);
@@ -185,6 +187,7 @@ int main(int argc, char *argv[]){
             free(vectorSize2);
             free(InterpretedKey);
             free(interpretedTag);
+            free(interpretedVector);
             return 1;
         } else if (blockCipherMode == 'E') {
             decryptFile_ECB(inputFile, outputFile, InterpretedKey, *bufferSize);
