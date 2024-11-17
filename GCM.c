@@ -128,6 +128,7 @@ int encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *
     u_int8_t h[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     u_int8_t hash[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     u_int8_t *flatblock = (u_int8_t *) malloc(16);
+    assert(flatblock);
     u_int64_t length = 0;
     char ch = fgetc(inputFile);
     int i = -1;
@@ -244,6 +245,7 @@ int encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *
         printf("%02x", hash[i]);
     }
     printf("\n");
+    free(flatblock);
     return 1;
 }
 
