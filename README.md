@@ -4,7 +4,7 @@ Carleton College, Computer Science, Fall Comps 2024
 
 This project was the culminating senior thesis for Will Puzella and Peter Kelly, where they implemented the Advanced Encryption Standard with three different block cipher modes (ECB, CBC, & GCM). A further description of the project can be found at the link below. 
 
-[Full Project Write-up](https://docs.google.com/document/d/1bHSC0a_PqbVgqA3vm7XZYiNbDfCSA94VPl45B3q-Zsg/edit?usp=sharing) 
+[Full Project Write-up](https://docs.google.com/document/d/e/2PACX-1vRGgC6vZzd487ZTYaiDn7aN-Bs_wYo5Czh3vawfzxOB2f_ZgL0ERrotfO2ej3H7fcIqcX-0wUDyJ1JY/pub) 
 
 ## Installation
 All Code required to run the files is located within the git repository. All libraries used are included in the standard C installation. 
