@@ -188,14 +188,14 @@ int main(int argc, char *argv[]){
             free(InterpretedKey);
             free(interpretedTag);
             free(interpretedVector);
-            return 1;
+            return 0;
         } else if (blockCipherMode == 'E') {
             decryptFile_ECB(inputFile, outputFile, InterpretedKey, *bufferSize);
             fclose(inputFile);
             fclose(outputFile);
             free(bufferSize);
             free(InterpretedKey);
-            return 1;
+            return 0;
         } else if (blockCipherMode == 'C') {
             int *vectorSize = (int *)malloc(4);
             assert(vectorSize);
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]){
             free(vectorSize);
             free(InterpretedKey);
             free(interpretedVector);
-            return 1;
+            return 0;
         }
     } else {
         if (blockCipherMode == 'G') {
@@ -244,14 +244,14 @@ int main(int argc, char *argv[]){
             free(vectorSize);
             free(InterpretedKey);
             free(interpretedVector);
-            return 1;
+            return 0;
         } else if (blockCipherMode == 'E') {
             encryptFile_ECB(inputFile, outputFile, InterpretedKey, *bufferSize);
             fclose(inputFile);
             fclose(outputFile);
             free(bufferSize);
             free(InterpretedKey);
-            return 1;
+            return 0;
         } else if (blockCipherMode == 'C') {
             int *vectorSize = (int *)malloc(4);
             assert(vectorSize);
@@ -271,7 +271,7 @@ int main(int argc, char *argv[]){
             free(vectorSize);
             free(InterpretedKey);
             free(interpretedVector);
-            return 1;
+            return 0;
         }
     }
 }
@@ -307,7 +307,7 @@ u_int8_t identifyChar(char ch) {
 u_int8_t *InterpretKey(char *key, int *bufferSize) {
     
     if (key[0] == '0' && (key[1] == 'x' || key[1] == 'X')) { // Hex Interpret mode
-        
+        printf("Hex");
         int keyStringlength = strlen(key) - 2;
         int i = 1;
         
@@ -349,9 +349,6 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
             *bufferSize = 256;
             return outputKey;
         }
-    } else if (checkNumber(key)) { // Int Interpret Mode
-        // Decide if this will be needed
-        return NULL;
     } else { // String Interpret Mode
         int keyStringlenth = strlen(key);
         if (keyStringlenth >= 16) {
@@ -367,6 +364,7 @@ u_int8_t *InterpretKey(char *key, int *bufferSize) {
                 i++;
             }
             *bufferSize = 128;
+            
             return outputKey;
         } else if (keyStringlenth >= 24) {
             u_int8_t *outputKey =  malloc(24);
