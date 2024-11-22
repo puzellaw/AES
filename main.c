@@ -307,7 +307,6 @@ u_int8_t identifyChar(char ch) {
 u_int8_t *InterpretKey(char *key, int *bufferSize) {
     
     if (key[0] == '0' && (key[1] == 'x' || key[1] == 'X')) { // Hex Interpret mode
-        printf("Hex");
         int keyStringlength = strlen(key) - 2;
         int i = 1;
         
