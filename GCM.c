@@ -139,10 +139,10 @@ int encryptFile_GCM(FILE *inputFile, FILE *outputFile, u_int8_t *key, u_int8_t *
         }
     } else {
         randomIntBlock(counter, NULL);
-        printf("N Created for GCM Scheme: ");
+        printf("N Created for GCM Scheme: 0x");
         for (int q = 0; q < 16; q++) {
             counterCopy[q%4][q/4] = counter[q%4][q/4];
-            printf("%c", counter[q%4][q/4]);
+            printf("%02x", counter[q%4][q/4]);
         }
         printf("\n");
     }
