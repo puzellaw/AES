@@ -40,6 +40,7 @@ This can be seen in the sample command above.
 - `-E` Encrypts in Electronic Code Book (ECB) block cipher mode
 - `-C` Encrypts in Counter Block Cipher (CBC) mode
 - `-G` Encrypts in Galois Counter Mode (GCM)
+- `-T` Authentication Tag (Required for GCM Decryption)
 
 A tag of `-I` and `-O` is required for all running of `PK_AES`. Additionally `-E`, `-C`, or `-G`must be chosen to indicate which block cipher mode is being used. Each block cipher mode has the additional arguments below. **Unless marked otherwise all arguments below are required for their respective block cipher mode.**
 
@@ -52,5 +53,6 @@ A tag of `-I` and `-O` is required for all running of `PK_AES`. Additionally `-E
 
 **`-G` Arguments**
 - `-K [Key String]` Input string can either be in hex 0xXXXXX format or a regular string. Key needs to be 128, 192, or 256 bits long. 
-- `-v [seed for n]` (Optional) Input string can either be in hex 0xXXXXX... format or a regular string. n seed needs to be 128 bits long.  
+- `-V [seed for n]` (Optional) Input string can either be in hex 0xXXXXX... format or a regular string. n seed needs to be 128 bits long.  
+- `-T [Authentication Tag]` (Only for Decryption) Input string can either be in hex 0xXXXXX... format or a regular string. Authentication Tag needs to be 128 bits long. 
 
